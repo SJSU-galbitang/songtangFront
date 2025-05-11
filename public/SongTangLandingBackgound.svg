@@ -1,7 +1,4 @@
-import type {SVGProps} from "@/types/images.ts"
-
-const LandingBackground = ({ width = 100, height = 100 }: SVGProps) => (
-<svg width={width} height={height} viewBox="0 0 1280 832" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="1280" height="832" viewBox="0 0 1280 832" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_41_26)">
 <rect width="1280" height="832" fill="#151515"/>
 <rect width="150" height="1200" transform="translate(-35 228)" fill="url(#paint0_linear_41_26)"/>
@@ -65,5 +62,3 @@ const LandingBackground = ({ width = 100, height = 100 }: SVGProps) => (
 </clipPath>
 </defs>
 </svg>
-        )
-export default LandingBackground;

@@ -1,4 +1,4 @@
 export interface SVGProps {
-    width?: number | string
-    height?: number | string
+  width?: number | string;
+  height?: number | string;
 }

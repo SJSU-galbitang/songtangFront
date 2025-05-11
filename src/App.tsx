@@ -1,11 +1,13 @@
+/** @jsxImportSource @emotion/react */
 import './App.css';
+import LandingPage from "@/pages/LandingPage.tsx";
 
 function App() {
   return (
     <>
-        <h1> 나를 화나게 하지마.</h1>
+        <LandingPage/>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
