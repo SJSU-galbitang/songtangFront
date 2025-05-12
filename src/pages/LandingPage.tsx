@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 const LandingPage = () => {
     return (
         <StyledLandingPage>
+            <h1> 테스트</h1>
         </StyledLandingPage>
     )
 };
