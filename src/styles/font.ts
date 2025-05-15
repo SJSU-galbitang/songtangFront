@@ -1,10 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-export const fontGenerator = (
-  weight: number,
-  size: number,
-) => css`
+export const fontGenerator = (weight: number, size: number) => css`
   font-family: 'Pretendard', sans-serif;
   font-weight: ${weight};
   font-size: ${size}rem;
@@ -14,7 +11,7 @@ export const fontGenerator = (
 const font = {
   D1: fontGenerator(600, 3),
 
-  H1: fontGenerator(500, 2.25,),
+  H1: fontGenerator(500, 2.25),
   H2: fontGenerator(500, 1.5),
   H3: fontGenerator(500, 1.25),
   H4: fontGenerator(600, 1),
