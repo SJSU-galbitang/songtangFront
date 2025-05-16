@@ -47,7 +47,7 @@ export default function AudioPlayer({ title, id, current, total }: AudioPlayerPr
         <ControlRow>
           <TimeText>{formatTime(current)}</TimeText>
 
-          <PlayButton onClick={togglePlay}>
+          <PlayButton onClick={togglePlay} aria-label={isPlaying ? 'Pause' : 'Play'}>
             {isPlaying ? (
               <svg viewBox="0 0 24 24">
                 <path d="M6 4h4v16H6zm8 0h4v16h-4z" />

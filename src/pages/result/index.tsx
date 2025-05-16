@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import AudioPlayer from '@/components/AudioPlayer';
+import { useNavigate } from 'react-router-dom';
 
 type ResultPageProps = {
   title?: string;
@@ -8,13 +9,13 @@ type ResultPageProps = {
   total?: number;
 };
 
-export default function ResultPage({ title = "Million Dollor Baby", id = 123123, current = 128, total = 328 }: ResultPageProps) {
-  
+export default function ResultPage({ title = "Million Dollar Baby", id = 123123, current = 128, total = 328 }: ResultPageProps) {
+  const navigate = useNavigate();
   return (
     <Wrapper>
       <Header>Here is your result. 🔥</Header>
       <AudioPlayer title={title} id={id} current={current} total={total} />
-      <BackButton onClick={() => (window.location.href = "/")}>
+      <BackButton onClick={() => (navigate('/'))}>
         Back to Home
       </BackButton>
     </Wrapper>
