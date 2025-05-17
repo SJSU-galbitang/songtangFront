@@ -9,15 +9,18 @@ type ResultPageProps = {
   total?: number;
 };
 
-export default function ResultPage({ title = "Million Dollar Baby", id = 123123, current = 128, total = 328 }: ResultPageProps) {
+export default function ResultPage({
+  title = 'Million Dollar Baby',
+  id = 123123,
+  current = 128,
+  total = 328,
+}: ResultPageProps) {
   const navigate = useNavigate();
   return (
     <Wrapper>
       <Header>Here is your result. 🔥</Header>
       <AudioPlayer title={title} id={id} current={current} total={total} />
-      <BackButton onClick={() => (navigate('/'))}>
-        Back to Home
-      </BackButton>
+      <BackButton onClick={() => navigate('/')}>Back to Home</BackButton>
     </Wrapper>
   );
 }
@@ -42,12 +45,7 @@ const Header = styled.h1`
 const BackButton = styled.button`
   margin-top: 32px;
   padding: 16px 120px;
-  background: linear-gradient(
-    90deg,
-    #f72a7d 3%,
-    #e53e3e 46%,
-    #ff16bd 100%
-  );
+  background: linear-gradient(90deg, #f72a7d 3%, #e53e3e 46%, #ff16bd 100%);
   border: none;
   border-radius: 8px;
   color: #fff;

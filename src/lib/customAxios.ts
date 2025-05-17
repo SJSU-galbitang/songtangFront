@@ -23,7 +23,7 @@ customAxios.interceptors.response.use(
       console.error(`API 에러 [${error.response.status}]:`, error.response.data);
     }
     return Promise.reject(error);
-  }) as IErrorInterceptor
+  }) as IErrorInterceptor,
 );
 
 export default customAxios;

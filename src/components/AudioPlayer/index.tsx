@@ -138,12 +138,7 @@ const ProgressBar = styled.div`
 const Progress = styled.div<{ percent: number }>`
   width: ${props => props.percent}%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    #f72a7d 3%,
-    #e53e3e 46%,
-    #ff16bd 100%
-  );
+  background: linear-gradient(90deg, #f72a7d 3%, #e53e3e 46%, #ff16bd 100%);
 `;
 
 const ControlRow = styled.div`
