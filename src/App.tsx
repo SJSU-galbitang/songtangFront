@@ -13,10 +13,12 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/survey" element={<Survey />} />
+          <Route>
+            <Route path="/survey" element={<Survey />} />
+            <Route path="/survey/melody" element={<SurveyMelody />} />
+            <Route path="/survey/lyrics" element={<SurveyLyric />} />
+          </Route>
           <Route path="/result" element={<Result />} />
-          <Route path="survey/melody" element={<SurveyMelody />} />
-          <Route path="survey/lyric" element={<SurveyLyric />} />
         </Routes>
       </BrowserRouter>
     </>
