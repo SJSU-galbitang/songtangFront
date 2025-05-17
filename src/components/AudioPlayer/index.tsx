@@ -7,9 +7,10 @@ type AudioPlayerProps = {
   id: number;
   current: number;
   total: number;
+  className?: string;
 };
 
-export default function AudioPlayer({ title, id, current, total }: AudioPlayerProps) {
+export default function AudioPlayer({ title, id, current, total, className }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const percent = (current / total) * 100;
 
@@ -26,7 +27,7 @@ export default function AudioPlayer({ title, id, current, total }: AudioPlayerPr
   };
 
   return (
-    <Card>
+    <Card className={className}>
       <Cover />
 
       <Info>
