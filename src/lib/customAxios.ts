@@ -1,4 +1,5 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import axios, { type AxiosInstance } from 'axios';
+import type { AxiosResponse, AxiosError } from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -23,7 +24,7 @@ customAxios.interceptors.response.use(
       console.error(`API 에러 [${error.response.status}]:`, error.response.data);
     }
     return Promise.reject(error);
-  }) as IErrorInterceptor
+  }) as IErrorInterceptor,
 );
 
 export default customAxios;
