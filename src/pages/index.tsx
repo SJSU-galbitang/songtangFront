@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import color from '../styles/color';
+import SongCard from '../components/Modal/SongCard';
 
 const Container = styled.div`
   display: grid;
@@ -8,6 +9,7 @@ const Container = styled.div`
   height: 100vh;
   background-color: ${color.black};
   color: white;
+  overflow-x: hidden;
 `;
 
 const Main = styled.main`
@@ -24,28 +26,30 @@ const Title = styled.h1`
 `;
 
 const StartButton = styled.button`
-  background:${color.gradient};
+  background: ${color.gradient};
   color: ${color.white};
   padding: 1rem 2rem;
   border: none;
   border-radius: 10px;
-  height:78px;
-  width:487px;
-  text-align:center;
-  font-size:32px;
+  height: 78px;
+  width: 487px;
+  text-align: center;
+  font-size: 32px;
 `;
 
 const Sidebar = styled.aside`
   padding: 1rem;
   background-color: ${color.black};
-  width:800px;
-  border:1px solid ${color.gray20};
-  overflow-y: auto
+  width: 800px;
+  border-left: 1px solid ${color.gray20};
+  overflow-y: auto;
+  width: 100%;
+  padding-left:23px;
 `;
 
 const Input = styled.input`
   width: 257px;
-  height:40px;
+  height: 40px;
   padding: 0.5rem;
   background: ${color.gray04};
   border: none;
@@ -66,8 +70,13 @@ const SectionTitle = styled.h2`
   margin-bottom: 0.5rem;
 `;
 
-const HomePage: React.FC = () => {
-  const [searchId, setSearchId] = useState('');
+const SongCardList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 25px;  
+`;
+
+const HomePage = () => {
 
   return (
     <Container>
@@ -77,14 +86,16 @@ const HomePage: React.FC = () => {
       </Main>
       <Sidebar>
         <Label htmlFor="searchSong">Find a song</Label>
-        <Input
-          id="searchSong"
-          type="text"
-          placeholder="Enter song ID"
-          value={searchId}
-          onChange={e => setSearchId(e.target.value)}
-        />
+        <Input placeholder="Enter song ID"/>
         <SectionTitle>Recent Creations</SectionTitle>
+        <SongCardList>
+        <SongCard
+          imageUrl="" title="잔혹한 천사의 뽕짝" duration="03:11"/>
+        <SongCard
+          imageUrl="" title="잔혹한 천사의 뽕짝1" duration="02:11"/>
+         <SongCard
+          imageUrl="" title="잔혹한 천사의 뽕짝2" duration="3:11"/>
+          </SongCardList>
       </Sidebar>
     </Container>
   );
