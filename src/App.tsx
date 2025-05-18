@@ -1,13 +1,8 @@
-/** @jsxImportSource @emotion/react */
-import './App.css';
-import LandingPage from "@/pages/LandingPage.tsx";
+import React from 'react';
+import HomePage from './pages/index';
 
 function App() {
-  return (
-    <>
-        <LandingPage/>
-    </>
-  );
+  return <HomePage />;
 }
 
 export default App;
