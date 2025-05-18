@@ -1,1 +1,9 @@
-//깃허브 올릴라고 예시
+import { useQuery } from "@tanstack/react-query";
+import { fetchSong } from "@/api/song";
+
+export const useSong = (songId: string) => {
+  return useQuery({
+    queryKey: ["song", songId],
+    queryFn: () => fetchSong(songId),
+  });
+}
