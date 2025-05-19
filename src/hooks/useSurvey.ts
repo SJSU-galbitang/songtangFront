@@ -5,7 +5,7 @@ export const useSurvey = (emotion: string) => {
   return useQuery({
     queryKey: ["survey", emotion],
     queryFn: () => API.fetchSurvey(emotion),
-    enabled: !!emotion,
+    enabled: false,
   });
 };
 
