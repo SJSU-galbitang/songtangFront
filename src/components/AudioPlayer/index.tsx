@@ -8,6 +8,7 @@ type AudioPlayerProps = {
   current: number;
   total: number;
   className?: string;
+  onClick?: () => void;
 };
 
 export default function AudioPlayer({ title, id, current, total, className }: AudioPlayerProps) {

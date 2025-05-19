@@ -35,12 +35,11 @@ export default SurveyLyric;
 
 const StyledLyric = styled.div`
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   background: ${color.gradient.background};
-  padding: 2rem 1rem;
   box-sizing: border-box;
   overflow-y: auto;
 

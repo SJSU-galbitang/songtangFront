@@ -4,6 +4,9 @@ import color from '../../../styles/color';
 import font from '../../../styles/font';
 import Logo from '../../../assets/images/SongTangTextLogo.svg';
 import AudioPlayer from '../../../components/AudioPlayer';
+import { useSurveyStore } from "../../../types/survey";
+import { useState } from 'react';
+
 
 interface MelodyProps {
   title?: string;
@@ -22,7 +25,19 @@ const SurveyMelody = ({
   current = 128,
   total = 328,
 }: MelodyProps) => {
-  return (
+  const [selectedMelody, setSelectedMelody] = useState<string[]>([]);
+  const { setMelodies } = useSurveyStore();
+
+  const handleMelodySelect = (melodyId: string) => {
+      const updated = selectedMelody.includes(melodyId)
+          ? selectedMelody.filter((id) => id !== melodyId)
+          : [...selectedMelody, melodyId];
+      setSelectedMelody(updated);
+      setMelodies(updated);
+    };
+
+
+    return (
     <StyledTestSong>
       <InnerSort>
         <LogoSort>
@@ -30,8 +45,10 @@ const SurveyMelody = ({
         </LogoSort>
         <StyledD1>Choose a Song 🎵</StyledD1>
         <AudioPlayerSort>
-          <SmallPlayer title={title} id={id} current={current} total={total} />
-          <SmallPlayer title={title} id={id} current={current} total={total} />
+          <SmallPlayer title={title} id={id} current={current} total={total}
+                       onClick={() => handleMelodySelect('song_id1')}/>
+          <SmallPlayer title={title} id={id} current={current} total={total}
+                       onClick={() => handleMelodySelect('song_id2')}/>
         </AudioPlayerSort>
       </InnerSort>
     </StyledTestSong>
@@ -42,7 +59,7 @@ export default SurveyMelody;
 
 const StyledTestSong = styled.div`
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,7 +80,6 @@ const InnerSort = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vw;
   justify-content: flex-start;
   gap: 4vh;
   box-sizing: border-box;
