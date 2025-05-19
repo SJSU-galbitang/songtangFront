@@ -12,8 +12,19 @@ export default function SurveyMelody() {
   const navigate = useNavigate();
   const [feeling, setFeeling] = useState<string>('');
 
-  const { data: surveyData } = useSurvey(feeling);
-  if (surveyData) console.log(surveyData);
+  const { data: surveyData, refetch, isFetching } = useSurvey(feeling);
+
+  const handleNext = () => {
+    if (!feeling) return;
+    refetch().then(() => {
+      navigate('/survey/melody', {
+        state: {
+          melodies: surveyData?.melodies,
+          lyrics: surveyData?.lyrics,
+        },
+      });
+    });
+  };
 
   return (
     <StyledTestSong>
@@ -23,9 +34,19 @@ export default function SurveyMelody() {
       <InnerSort>
         <InputWrapper>
           <Subtitle>Describe how you've been feeling recently.</Subtitle>
-          <StyledTextArea placeholder="How are you feeling?" onChange={(e) => setFeeling(e.target.value)}/>
+          <StyledTextArea
+            placeholder="How are you feeling?"
+            value={feeling}
+            onChange={(e) => setFeeling(e.target.value)}
+          />
         </InputWrapper>
-        <NextButton onClick={() => navigate('/survey/melody')}>Next</NextButton>
+
+        <NextButton
+          onClick={handleNext}
+          disabled={!feeling || isFetching}
+        >
+          {isFetching ? 'Loading…' : 'Next'}
+        </NextButton>
       </InnerSort>
     </StyledTestSong>
   );
