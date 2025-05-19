@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
 import Logo from '@/assets/images/SongTangTextLogo.svg';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useSurvey } from '@/hooks/useSurvey';
 
 const breakpoints = {
   mobile: '768px',
@@ -8,6 +10,11 @@ const breakpoints = {
 
 export default function SurveyMelody() {
   const navigate = useNavigate();
+  const [feeling, setFeeling] = useState<string>('');
+
+  const { data: surveyData } = useSurvey(feeling);
+  if (surveyData) console.log(surveyData);
+
   return (
     <StyledTestSong>
       <LogoSort>
@@ -16,7 +23,7 @@ export default function SurveyMelody() {
       <InnerSort>
         <InputWrapper>
           <Subtitle>Describe how you've been feeling recently.</Subtitle>
-          <StyledTextArea placeholder="How are you feeling?" />
+          <StyledTextArea placeholder="How are you feeling?" onChange={(e) => setFeeling(e.target.value)}/>
         </InputWrapper>
         <NextButton onClick={() => navigate('/survey/melody')}>Next</NextButton>
       </InnerSort>
