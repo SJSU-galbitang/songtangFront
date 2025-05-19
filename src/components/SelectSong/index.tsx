@@ -1,14 +1,28 @@
+import color from '@/styles/color';
 import React from 'react';
 import styled from 'styled-components';
-import color from '../../styles/color';
 
 
 type SongCardProps = {
   imageUrl: string;
   title: string;
-  duration: string;
+  id:string;
+  length: string;
 };
 
+
+
+const SongCard: React.FC<SongCardProps> = ({ imageUrl, title, length }) => {
+  return (
+    <Card>
+      <Thumbnail src={imageUrl} alt={title} />
+      <SongInfo>
+        <Title>{title}</Title>
+        <Duration>{length}</Duration>
+      </SongInfo>
+    </Card>
+  );
+};
 const Card = styled.div`
   display: flex;
   align-items: center;
@@ -25,8 +39,9 @@ const Card = styled.div`
 `;
 
 const Thumbnail = styled.img`
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
   object-fit: cover;
 `;
 
@@ -46,15 +61,5 @@ const Duration = styled.span`
   font-size: 14px;
   color: #aaa;
 `;
-
-const SongCard = ({ imageUrl, title, duration }: SongCardProps) => (
-  <Card>
-    <Thumbnail src={imageUrl} alt={title} />
-    <SongInfo>
-      <Title>{title}</Title>
-      <Duration>{duration}</Duration>
-    </SongInfo>
-  </Card>
-);
 
 export default SongCard;

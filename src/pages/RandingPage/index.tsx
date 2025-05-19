@@ -1,7 +1,43 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
-import color from '../styles/color';
-import SongCard from '../components/Modal/SongCard';
+import color from '../../styles/color';
+import SongCard from '../../components/SelectSong';
+import SongTangLogo from '../../assets/images/SongTangTextLogo.svg';
+
+const HomePage = () => {
+
+  return (
+    <Container>
+      <Main>
+        <Logo>
+          <img src={SongTangLogo} alt="Songtang" />
+        </Logo>
+        <StartButton>Start Test</StartButton>
+      </Main>
+      <Sidebar>
+        <Label htmlFor="searchSong">Find a song</Label>
+        <Input placeholder="Enter song ID"/>
+        <SectionTitle>Recent Creations</SectionTitle>
+        <SongCardList>
+        <SongCard
+          imageUrl="" id="" title="잔혹한 천사의 뽕짝" length="03:11"/>
+        <SongCard
+          imageUrl="" id="" title="잔혹한 천사의 뽕짝1" length="02:11"/>
+         <SongCard
+          imageUrl="" id="" title="잔혹한 천사의 뽕짝2" length="3:11"/>
+          </SongCardList>
+      </Sidebar>
+    </Container>
+  );
+};
+
+const Logo = styled.div`
+  display:flex;
+  padding-bottom:120px;
+  img{
+  width:406px;
+  height:80px;
+}
+`;
 
 const Container = styled.div`
   display: grid;
@@ -19,11 +55,6 @@ const Main = styled.main`
   align-items: center;
 `;
 
-const Title = styled.h1`
-  font-size: 80px;
-  font-weight: bold;
-  margin-bottom: 132px;
-`;
 
 const StartButton = styled.button`
   background: ${color.gradient};
@@ -40,7 +71,7 @@ const StartButton = styled.button`
 const Sidebar = styled.aside`
   padding: 1rem;
   background-color: ${color.black};
-  width: 800px;
+
   border-left: 1px solid ${color.gray20};
   overflow-y: auto;
   width: 100%;
@@ -76,29 +107,5 @@ const SongCardList = styled.div`
   gap: 25px;  
 `;
 
-const HomePage = () => {
-
-  return (
-    <Container>
-      <Main>
-        <Title>Songtang</Title>
-        <StartButton>Start Test</StartButton>
-      </Main>
-      <Sidebar>
-        <Label htmlFor="searchSong">Find a song</Label>
-        <Input placeholder="Enter song ID"/>
-        <SectionTitle>Recent Creations</SectionTitle>
-        <SongCardList>
-        <SongCard
-          imageUrl="" title="잔혹한 천사의 뽕짝" duration="03:11"/>
-        <SongCard
-          imageUrl="" title="잔혹한 천사의 뽕짝1" duration="02:11"/>
-         <SongCard
-          imageUrl="" title="잔혹한 천사의 뽕짝2" duration="3:11"/>
-          </SongCardList>
-      </Sidebar>
-    </Container>
-  );
-};
 
 export default HomePage;
