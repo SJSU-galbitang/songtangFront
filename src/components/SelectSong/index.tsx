@@ -10,8 +10,6 @@ type SongCardProps = {
   length: string;
 };
 
-
-
 const SongCard: React.FC<SongCardProps> = ({ imageUrl, title, length }) => {
   return (
     <Card>
