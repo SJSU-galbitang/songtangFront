@@ -4,13 +4,12 @@ import SongCard from '@/components/SelectSong/SongCard';
 import SongTangLogo from '../../assets/images/SongTangTextLogo.svg';
 import { useNavigate } from 'react-router-dom';
 
-type SelectSongProps = {
-  title: string;
-  id: string;
-  length: string;
-};
+const HomePage = () => {
 
-const HomePage = ({ title, id, length }: SelectSongProps) => {
+  const title: string = "test";
+  const id: string = "adsfadf";
+  const length: string = "03:28";
+
   const navigate = useNavigate();
   return (
     <Container>
