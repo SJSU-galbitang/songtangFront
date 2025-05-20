@@ -4,49 +4,41 @@ import color from '../../../styles/color';
 import font from '../../../styles/font';
 import Logo from '../../../assets/images/SongTangTextLogo.svg';
 import AudioPlayer from '../../../components/AudioPlayer';
-import { useSurveyStore } from "@/types/survey.ts";
 import { useState, useEffect } from 'react';
-import { useSurvey } from '@/hooks/useSurvey.ts';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const breakpoints = {
   mobile: '768px',
 };
 
-const SurveyMelody = ({ emotion = 'happy' }) => {
+const SurveyMelody = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedMelodies, setSelectedMelodies] = useState<string[]>([]);
-  const { setMelodies } = useSurveyStore();
-  const { data, refetch } = useSurvey(emotion);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    refetch();
-  }, []);
+  const location = useLocation();
+  const { data } = location.state;
 
   const handleSelect = (melodyId: string) => {
     const updated = [...selectedMelodies, melodyId];
     setSelectedMelodies(updated);
-    setMelodies(updated);
     setTimeout(() => {
       setCurrentIndex((prev) => prev + 1);
     }, 2000);
   };
 
-  const isFinished = currentIndex >= Math.ceil(data.melodies.length / 2);
+  const isFinished = currentIndex >= Math.ceil(data?.melodies.length / 2);
 
   useEffect(() => {
     if (isFinished && data.melodies.length > 0) {
-      navigate('/lyrics', {
+      navigate('/survey/lyrics', {
         state: {
-          lyricsList: data.melodies,
-          onSelect: setMelodies,
+          lyricsList: selectedMelodies
         },
       });
     }
-  }, [isFinished, data.melodies, navigate, setMelodies]);
+  }, [isFinished, data?.melodies, navigate]);
 
-  const displayMelodies = data.melodies.slice(currentIndex * 2, currentIndex * 2 + 2);
+  const displayMelodies = data?.melodies.slice(currentIndex * 2, currentIndex * 2 + 2);
 
   return (
       <StyledTestSong>
@@ -56,13 +48,12 @@ const SurveyMelody = ({ emotion = 'happy' }) => {
           </LogoSort>
           <StyledD1>Choose a Song 🎵</StyledD1>
           <AudioPlayerSort>
-            {displayMelodies.map((melody: any) => (
+            {displayMelodies?.map((melody: any) => (
                 <SmallPlayer
                     key={melody.id}
                     title={melody.title}
                     id={melody.id}
-                    current={melody.current}
-                    total={melody.total}
+                    total={melody.length}
                     onClick={() => handleSelect(melody.id)}
                 />
             ))}

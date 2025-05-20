@@ -3,10 +3,8 @@ import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import color from '../../../styles/color';
 import font from '../../../styles/font';
-import {getLyrics} from "@/api/survey.ts";
 import Logo from '../../../assets/images/SongTangTextLogo.svg';
 import LyricViewer from '../../../components/LyricViewer';
-import { useLocation } from 'react-router-dom';
 
 interface MelodyProps {
   id: string;
@@ -22,7 +20,7 @@ const breakpoints = {
   mobile: '768px',
 };
 
-const SurveyLyric = ({ onSelect }: SurveyLyricProps) => {
+const SurveyLyric = ({ lyricsList, onSelect }: SurveyLyricProps) => {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -30,8 +28,6 @@ const SurveyLyric = ({ onSelect }: SurveyLyricProps) => {
     first: '',
     second: '',
   });
-  const location = useLocation();
-  const { lyricsList } = location.state;
 
   const handleSelect = (melodyId: string) => {
     if (!selectedCard) {
@@ -46,31 +42,6 @@ const SurveyLyric = ({ onSelect }: SurveyLyricProps) => {
   };
 
   useEffect(() => {
-    const fetchLyrics = async () => {
-      const first = lyricsList[currentIndex];
-      const second = lyricsList[currentIndex + 1];
-      if (!first || !second) return;
-
-      try {
-        const [firstData, secondData] = await Promise.all([
-          getLyrics(first.id),
-          getLyrics(second.id),
-        ]);
-        setCurrentLyrics({
-          first: firstData.lyrics,
-          second: secondData.lyrics,
-        });
-      } catch (err) {
-        console.error('가사 불러오기 실패했어용 😭', err);
-      }
-    };
-
-    if (currentIndex < lyricsList.length) {
-      fetchLyrics();
-    }
-  }, [currentIndex, lyricsList]);
-
-  useEffect(() => {
     if (currentIndex >= lyricsList.length) {
       onSelect(selectedIds);
     }
@@ -78,6 +49,15 @@ const SurveyLyric = ({ onSelect }: SurveyLyricProps) => {
 
   const first = lyricsList[currentIndex];
   const second = lyricsList[currentIndex + 1];
+
+  useEffect(() => {
+    if (first && second) {
+      setCurrentLyrics({
+        first: first.lyrics,
+        second: second.lyrics,
+      });
+    }
+  }, [currentIndex]);
 
   if (!first || !second) return null;
 
@@ -106,8 +86,6 @@ const SurveyLyric = ({ onSelect }: SurveyLyricProps) => {
 };
 
 export default SurveyLyric;
-
-// ----------------- styled components 아래에 그대로 있어용 -------------------
 
 const StyledLyric = styled.div`
   width: 100%;

@@ -1,19 +1,45 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import Copy from '@/assets/icons/copy.svg';
 
 type AudioPlayerProps = {
   title: string;
   id: number;
-  current: number;
-  total: number;
+  total: string;
   className?: string;
   onClick?: () => void;
 };
 
-export default function AudioPlayer({ title, id, current, total, className, onClick }: AudioPlayerProps) {
+export default function AudioPlayer({ title, id, total, className, onClick }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const percent = (current / total) * 100;
+  const [current, setCurrent] = useState<number>(0);
+
+  const length = total.split(':');
+  const totalSec = Number(length[0]) * 60 + Number(length[1]);
+
+  const percent = (current / totalSec) * 100;
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+
+    if (isPlaying) {
+      interval = setInterval(() => {
+        setCurrent(prev => {
+          if (prev < totalSec) return prev + 1;
+          else {
+            setIsPlaying(false);
+            return prev;
+          }
+        });
+      }, 1000);
+    } else if (!isPlaying && interval) {
+      clearInterval(interval);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isPlaying, totalSec]);
 
   const formatTime = (sec: number) => {
     const m = String(Math.floor(sec / 60)).padStart(2, '0');
@@ -28,45 +54,47 @@ export default function AudioPlayer({ title, id, current, total, className, onCl
   };
 
   return (
-    <Card className={className} onClick={onClick}>
-      <Cover />
+      <Card className={className} onClick={onClick}>
+        <Cover />
 
-      <Info>
-        <SongInfoWrap>
-          <Title>{title}</Title>
-          <IDRow>
-            <SubTitle>ID: {id}</SubTitle>
-            <CopyButton onClick={copyId}>
-              <img src={Copy} alt="copy icon" />
-            </CopyButton>
-          </IDRow>
-        </SongInfoWrap>
+        <Info>
+          <SongInfoWrap>
+            <Title>{title}</Title>
+            <IDRow>
+              <SubTitle>ID: {id}</SubTitle>
+              <CopyButton onClick={(e) => { e.stopPropagation(); copyId(); }}>
+                <img src={Copy} alt="copy icon" />
+              </CopyButton>
+            </IDRow>
+          </SongInfoWrap>
 
-        <ProgressBar>
-          <Progress percent={percent} />
-        </ProgressBar>
+          <ProgressBar>
+            <Progress percent={percent} />
+          </ProgressBar>
 
-        <ControlRow>
-          <TimeText>{formatTime(current)}</TimeText>
+          <ControlRow>
+            <TimeText>{formatTime(current)}</TimeText>
 
-          <PlayButton onClick={togglePlay} aria-label={isPlaying ? 'Pause' : 'Play'}>
-            {isPlaying ? (
-              <svg viewBox="0 0 24 24">
-                <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            )}
-          </PlayButton>
+            <PlayButton onClick={(e) => { e.stopPropagation(); togglePlay(); }} aria-label={isPlaying ? 'Pause' : 'Play'}>
+              {isPlaying ? (
+                  <svg viewBox="0 0 24 24">
+                    <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
+                  </svg>
+              ) : (
+                  <svg viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+              )}
+            </PlayButton>
 
-          <TimeText>{formatTime(total)}</TimeText>
-        </ControlRow>
-      </Info>
-    </Card>
+            <TimeText>{total}</TimeText>
+          </ControlRow>
+        </Info>
+      </Card>
   );
 }
+
+// Styled components definitions remain unchanged
 
 const Card = styled.div`
   background: #252525;

@@ -6,20 +6,19 @@ type ResultPageProps = {
   title?: string;
   id?: number;
   current?: number;
-  total?: number;
+  total?: string;
 };
 
 export default function ResultPage({
   title = 'Million Dollar Baby',
   id = 123123,
-  current = 128,
-  total = 328,
+  total = '328',
 }: ResultPageProps) {
   const navigate = useNavigate();
   return (
     <Wrapper>
       <Header>Here is your result. 🔥</Header>
-      <AudioPlayer title={title} id={id} current={current} total={total} />
+      <AudioPlayer title={title} id={id} total={total} />
       <BackButton onClick={() => navigate('/')}>Back to Home</BackButton>
     </Wrapper>
   );
