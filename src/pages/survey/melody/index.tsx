@@ -140,14 +140,6 @@ const StyledD1 = styled.h1`
   }
 `;
 
-const StyledFinish = styled.div`
-  color: ${color.white};
-  font-size: 1.5rem;
-  font-weight: bold;
-  padding: 2rem;
-  text-align: center;
-`;
-
 const AudioPlayerSort = styled.div`
   width: 100%;
   display: flex;
