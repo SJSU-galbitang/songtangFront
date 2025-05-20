@@ -11,7 +11,7 @@ type AudioPlayerProps = {
   onClick?: () => void;
 };
 
-export default function AudioPlayer({ title, id, current, total, className }: AudioPlayerProps) {
+export default function AudioPlayer({ title, id, current, total, className, onClick }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const percent = (current / total) * 100;
 
@@ -28,7 +28,7 @@ export default function AudioPlayer({ title, id, current, total, className }: Au
   };
 
   return (
-    <Card className={className}>
+    <Card className={className} onClick={onClick}>
       <Cover />
 
       <Info>

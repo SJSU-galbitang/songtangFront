@@ -4,54 +4,71 @@ import color from '../../../styles/color';
 import font from '../../../styles/font';
 import Logo from '../../../assets/images/SongTangTextLogo.svg';
 import AudioPlayer from '../../../components/AudioPlayer';
-import { useSurveyStore } from "../../../types/survey";
-import { useState } from 'react';
-
-
-interface MelodyProps {
-  title?: string;
-  id?: number;
-  current?: number;
-  total?: number;
-}
+import { useSurveyStore } from "@/types/survey.ts";
+import { useState, useEffect } from 'react';
+import { useSurvey } from '@/hooks/useSurvey.ts';
+import { useNavigate } from 'react-router-dom';
 
 const breakpoints = {
   mobile: '768px',
 };
 
-const SurveyMelody = ({
-  title = 'Cruel Summer',
-  id = 123123,
-  current = 128,
-  total = 328,
-}: MelodyProps) => {
-  const [selectedMelody, setSelectedMelody] = useState<string[]>([]);
+const SurveyMelody = ({ emotion = 'happy' }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedMelodies, setSelectedMelodies] = useState<string[]>([]);
   const { setMelodies } = useSurveyStore();
+  const { data, refetch } = useSurvey(emotion);
+  const navigate = useNavigate();
 
-  const handleMelodySelect = (melodyId: string) => {
-      const updated = selectedMelody.includes(melodyId)
-          ? selectedMelody.filter((id) => id !== melodyId)
-          : [...selectedMelody, melodyId];
-      setSelectedMelody(updated);
-      setMelodies(updated);
-    };
+  useEffect(() => {
+    refetch();
+  }, []);
 
+  const handleSelect = (melodyId: string) => {
+    const updated = [...selectedMelodies, melodyId];
+    setSelectedMelodies(updated);
+    setMelodies(updated);
+    setTimeout(() => {
+      setCurrentIndex((prev) => prev + 1);
+    }, 2000);
+  };
 
-    return (
-    <StyledTestSong>
-      <InnerSort>
-        <LogoSort>
-          <StyledLogo src={Logo} alt="SongTang logo" />
-        </LogoSort>
-        <StyledD1>Choose a Song 🎵</StyledD1>
-        <AudioPlayerSort>
-          <SmallPlayer title={title} id={id} current={current} total={total}
-                       onClick={() => handleMelodySelect('song_id1')}/>
-          <SmallPlayer title={title} id={id} current={current} total={total}
-                       onClick={() => handleMelodySelect('song_id2')}/>
-        </AudioPlayerSort>
-      </InnerSort>
-    </StyledTestSong>
+  const isFinished = currentIndex >= Math.ceil(data.melodies.length / 2);
+
+  useEffect(() => {
+    if (isFinished && data.melodies.length > 0) {
+      navigate('/lyrics', {
+        state: {
+          lyricsList: data.melodies,
+          onSelect: setMelodies,
+        },
+      });
+    }
+  }, [isFinished, data.melodies, navigate, setMelodies]);
+
+  const displayMelodies = data.melodies.slice(currentIndex * 2, currentIndex * 2 + 2);
+
+  return (
+      <StyledTestSong>
+        <InnerSort>
+          <LogoSort>
+            <StyledLogo src={Logo} alt="SongTang logo" />
+          </LogoSort>
+          <StyledD1>Choose a Song 🎵</StyledD1>
+          <AudioPlayerSort>
+            {displayMelodies.map((melody: any) => (
+                <SmallPlayer
+                    key={melody.id}
+                    title={melody.title}
+                    id={melody.id}
+                    current={melody.current}
+                    total={melody.total}
+                    onClick={() => handleSelect(melody.id)}
+                />
+            ))}
+          </AudioPlayerSort>
+        </InnerSort>
+      </StyledTestSong>
   );
 };
 
@@ -59,7 +76,7 @@ export default SurveyMelody;
 
 const StyledTestSong = styled.div`
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,13 +104,11 @@ const InnerSort = styled.div`
   @media (max-width: ${breakpoints.mobile}) {
     gap: 3vh;
     width: 95%;
-    display: flex;
   }
 `;
 
 const LogoSort = styled.div`
   width: 100%;
-  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -104,7 +119,6 @@ const StyledLogo = styled.img`
   width: 30%;
   max-width: 300px;
   height: auto;
-  margin: 0;
 
   @media (max-width: ${breakpoints.mobile}) {
     width: 50%;
@@ -117,38 +131,40 @@ const StyledD1 = styled.h1`
   font-size: clamp(2rem, 4vw + 1rem, 3rem);
   color: ${color.white};
   text-align: center;
-  margin: 0;
-  padding: 0 1rem;
-  box-sizing: border-box;
   width: 100%;
+  padding: 0 1rem;
+  margin: 0;
 
   @media (max-width: ${breakpoints.mobile}) {
     font-size: clamp(1.5rem, 6vw, 2rem);
   }
 `;
 
+const StyledFinish = styled.div`
+  color: ${color.white};
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 2rem;
+  text-align: center;
+`;
+
 const AudioPlayerSort = styled.div`
-  width: 100vw;
-  height: auto;
+  width: 100%;
   display: flex;
-  align-items: center;
+  gap: 20px;
   justify-content: center;
-  box-sizing: border-box;
+  align-items: center;
 
   @media (max-width: ${breakpoints.mobile}) {
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
     gap: 15px;
-    padding: 0;
   }
 `;
 
 const SmallPlayer = styled(AudioPlayer)`
   width: 45%;
-  height: auto;
-  transform: scale(0.95);
   cursor: pointer;
+  transform: scale(0.95);
   transition: transform 0.2s ease-in-out;
 
   &:hover {

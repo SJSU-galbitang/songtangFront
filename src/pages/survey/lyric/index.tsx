@@ -1,37 +1,113 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
 import color from '../../../styles/color';
 import font from '../../../styles/font';
+import {getLyrics} from "@/api/survey.ts";
 import Logo from '../../../assets/images/SongTangTextLogo.svg';
 import LyricViewer from '../../../components/LyricViewer';
+import { useLocation } from 'react-router-dom';
 
 interface MelodyProps {
-  title?: string;
-  lyrics?: string;
+  id: string;
+  lyrics: string;
+}
+
+interface SurveyLyricProps {
+  lyricsList: MelodyProps[];
+  onSelect: (selectedIds: string[]) => void;
 }
 
 const breakpoints = {
   mobile: '768px',
 };
 
-const SurveyLyric = ({ title = 'Cruel Summer', lyrics = '안녕 빡빡이 아저씨야' }: MelodyProps) => {
+const SurveyLyric = ({ onSelect }: SurveyLyricProps) => {
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [currentLyrics, setCurrentLyrics] = useState<{ first: string; second: string }>({
+    first: '',
+    second: '',
+  });
+  const location = useLocation();
+  const { lyricsList } = location.state;
+
+  const handleSelect = (melodyId: string) => {
+    if (!selectedCard) {
+      setSelectedCard(melodyId);
+      setSelectedIds((prev) => [...prev, melodyId]);
+
+      setTimeout(() => {
+        setCurrentIndex((prev) => prev + 2);
+        setSelectedCard(null);
+      }, 2000);
+    }
+  };
+
+  useEffect(() => {
+    const fetchLyrics = async () => {
+      const first = lyricsList[currentIndex];
+      const second = lyricsList[currentIndex + 1];
+      if (!first || !second) return;
+
+      try {
+        const [firstData, secondData] = await Promise.all([
+          getLyrics(first.id),
+          getLyrics(second.id),
+        ]);
+        setCurrentLyrics({
+          first: firstData.lyrics,
+          second: secondData.lyrics,
+        });
+      } catch (err) {
+        console.error('가사 불러오기 실패했어용 😭', err);
+      }
+    };
+
+    if (currentIndex < lyricsList.length) {
+      fetchLyrics();
+    }
+  }, [currentIndex, lyricsList]);
+
+  useEffect(() => {
+    if (currentIndex >= lyricsList.length) {
+      onSelect(selectedIds);
+    }
+  }, [currentIndex, lyricsList.length, selectedIds, onSelect]);
+
+  const first = lyricsList[currentIndex];
+  const second = lyricsList[currentIndex + 1];
+
+  if (!first || !second) return null;
+
   return (
-    <StyledLyric>
-      <InnerSort>
-        <LogoSort>
-          <StyledLogo src={Logo} alt="SongTang logo" />
-        </LogoSort>
-        <StyledD1>Choose a Lyrics 📃</StyledD1>
-        <LyricViewerSort>
-          <LyricViewer title={title} lyrics={lyrics} />
-          <LyricViewer title={title} lyrics={lyrics} />
-        </LyricViewerSort>
-      </InnerSort>
-    </StyledLyric>
+      <StyledLyric>
+        <InnerSort>
+          <LogoSort>
+            <StyledLogo src={Logo} alt="SongTang logo" />
+          </LogoSort>
+          <StyledD1>Choose a Lyrics 📃</StyledD1>
+          <LyricViewerSort>
+            <LyricViewer
+                lyrics={currentLyrics.first}
+                isSelected={selectedCard === first.id}
+                onClick={() => handleSelect(first.id)}
+            />
+            <LyricViewer
+                lyrics={currentLyrics.second}
+                isSelected={selectedCard === second.id}
+                onClick={() => handleSelect(second.id)}
+            />
+          </LyricViewerSort>
+        </InnerSort>
+      </StyledLyric>
   );
 };
 
 export default SurveyLyric;
+
+// ----------------- styled components 아래에 그대로 있어용 -------------------
 
 const StyledLyric = styled.div`
   width: 100%;

@@ -5,7 +5,7 @@ export const useSurvey = (emotion: string) => {
   return useQuery({
     queryKey: ["survey", emotion],
     queryFn: () => API.fetchSurvey(emotion),
-    enabled: !!emotion,
+    enabled: true,
   });
 };
 
@@ -15,3 +15,11 @@ export const useCreateSong = () => {
     mutationKey: ["createSong"],
   });
 }
+
+export const useSubmitSurveyResult = () => {
+  return useMutation({
+    mutationFn: (data: { selectedIds: string[] }) => API.submitSurveyResult(data),
+    mutationKey: ["submitSurveyResult"],
+  });
+};
+
