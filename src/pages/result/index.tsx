@@ -1,26 +1,34 @@
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import AudioPlayer from '@/components/AudioPlayer';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
-type ResultPageProps = {
-  title?: string;
-  id?: number;
-  current?: number;
-  total?: number;
-};
-
-export default function ResultPage({
-  title = 'Million Dollar Baby',
-  id = 123123,
-  current = 128,
-  total = 328,
-}: ResultPageProps) {
+export default function ResultPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { title, id, total } = location.state as {
+    title: string;
+    id: string;
+    total: string;
+  };
+
+  useEffect(() => {
+    const recents = JSON.parse(localStorage.getItem('recentSongs') || '[]');
+    if (!recents.includes(id)) {
+      recents.unshift(id);
+      if (recents.length > 10) recents.pop();
+      localStorage.setItem('recentSongs', JSON.stringify(recents));
+    }
+  }, [id]);
+
+  const handleBack = () => navigate('/');
+
   return (
     <Wrapper>
       <Header>Here is your result. 🔥</Header>
-      <AudioPlayer title={title} id={id} current={current} total={total} />
-      <BackButton onClick={() => navigate('/')}>Back to Home</BackButton>
+      <AudioPlayer title={title} id={id} total={total} />
+      <BackButton onClick={handleBack}>Back to Home</BackButton>
+      <AddButton onClick={handleBack}>Go to Recently Created</AddButton>
     </Wrapper>
   );
 }
@@ -54,5 +62,21 @@ const BackButton = styled.button`
   transition: opacity 0.2s;
   &:hover {
     opacity: 0.9;
+  }
+`;
+
+// 최근 생성 목록으로 이동하는 버튼
+const AddButton = styled.button`
+  margin-top: 16px;
+  padding: 12px 80px;
+  background: #333;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  &:hover {
+    opacity: 0.8;
   }
 `;
