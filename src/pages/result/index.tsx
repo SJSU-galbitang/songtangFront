@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import AudioPlayer from '@/components/AudioPlayer';
 import { useNavigate } from 'react-router-dom';
 
+<<<<<<< HEAD
 type ResultPageProps = {
   title?: string;
   id?: number;
@@ -14,6 +15,10 @@ export default function ResultPage({
   id = 123123,
   total = '328',
 }: ResultPageProps) {
+=======
+
+export default function ResultPage() {
+>>>>>>> 352ec98 (chore :: api 연결)
   const navigate = useNavigate();
   return (
     <Wrapper>

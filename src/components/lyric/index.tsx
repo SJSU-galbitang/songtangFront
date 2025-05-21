@@ -1,10 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
+<<<<<<< HEAD:src/pages/survey/lyric/index.tsx
 import { useEffect, useState } from 'react';
 import color from '../../../styles/color';
 import font from '../../../styles/font';
 import Logo from '../../../assets/images/SongTangTextLogo.svg';
 import LyricViewer from '../../../components/LyricViewer';
+=======
+import color from '../../styles/color.ts';
+import font from '../../styles/font.ts';
+import Logo from '../../assets/images/SongTangTextLogo.svg';
+import LyricViewer from '../LyricViewer';
+>>>>>>> 352ec98 (chore :: api 연결):src/components/lyric/index.tsx
 
 interface MelodyProps {
   id: string;

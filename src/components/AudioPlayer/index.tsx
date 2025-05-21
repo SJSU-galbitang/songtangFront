@@ -1,15 +1,24 @@
+<<<<<<< HEAD
 import { useState, useEffect } from 'react';
+=======
+import { useState, useRef, useEffect, useMemo } from 'react';
+>>>>>>> 352ec98 (chore :: api 연결)
 import styled from '@emotion/styled';
 import Copy from '@/assets/icons/copy.svg';
 
 type AudioPlayerProps = {
   title: string;
+<<<<<<< HEAD
   id: number;
+=======
+  id: string;
+>>>>>>> 352ec98 (chore :: api 연결)
   total: string;
   className?: string;
   onClick?: () => void;
 };
 
+<<<<<<< HEAD
 export default function AudioPlayer({ title, id, total, className, onClick }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [current, setCurrent] = useState<number>(0);
@@ -40,6 +49,30 @@ export default function AudioPlayer({ title, id, total, className, onClick }: Au
       if (interval) clearInterval(interval);
     };
   }, [isPlaying, totalSec]);
+=======
+export default function AudioPlayer({ title, id, total, className }: AudioPlayerProps) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [current, setCurrent] = useState(0);
+
+  const audioSrc = `https://cdn1.suno.ai/${id}.mp3`;
+  const coverUrl = `https://cdn2.suno.ai/image_${id}.jpeg`;
+
+  const durationSec = useMemo(() => {
+    const [m, s] = total.split(':').map(Number);
+    return m * 60 + s;
+  }, [total]);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (isPlaying) audio.pause();
+    else audio.play();
+    setIsPlaying(!isPlaying);
+  };
+
+  const copyId = () => navigator.clipboard.writeText(String(id));
+>>>>>>> 352ec98 (chore :: api 연결)
 
   const formatTime = (sec: number) => {
     const m = String(Math.floor(sec / 60)).padStart(2, '0');
@@ -47,13 +80,19 @@ export default function AudioPlayer({ title, id, total, className, onClick }: Au
     return `${m}:${s}`;
   };
 
-  const copyId = () => navigator.clipboard.writeText(String(id));
+  useEffect(() => {
+    const audio = audioRef.current!;
+    const onTimeUpdate = () => setCurrent(audio.currentTime);
+    audio.addEventListener('timeupdate', onTimeUpdate);
+    return () => {
+      audio.removeEventListener('timeupdate', onTimeUpdate);
+    };
+  }, []);
 
-  const togglePlay = () => {
-    setIsPlaying(prev => !prev);
-  };
+  const percent = durationSec ? (current / durationSec) * 100 : 0;
 
   return (
+<<<<<<< HEAD
       <Card className={className} onClick={onClick}>
         <Cover />
 
@@ -76,6 +115,31 @@ export default function AudioPlayer({ title, id, total, className, onClick }: Au
             <TimeText>{formatTime(current)}</TimeText>
 
             <PlayButton onClick={(e) => { e.stopPropagation(); togglePlay(); }} aria-label={isPlaying ? 'Pause' : 'Play'}>
+=======
+      <Card className={className}>
+        <audio ref={audioRef} src={audioSrc} preload="metadata" />
+
+        <Cover style={{ backgroundImage: `url(${coverUrl})` }} />
+
+        <Info>
+          <SongInfoWrap>
+            <Title>{title}</Title>
+            <IDRow>
+              <SubTitle>ID: {id}</SubTitle>
+              <CopyButton onClick={copyId}>
+                <img src={Copy} alt="copy icon" />
+              </CopyButton>
+            </IDRow>
+          </SongInfoWrap>
+
+          <ProgressBar>
+            <Progress percent={percent} />
+          </ProgressBar>
+
+          <ControlRow>
+            <TimeText>{formatTime(current)}</TimeText>
+            <PlayButton onClick={togglePlay} aria-label={isPlaying ? 'Pause' : 'Play'}>
+>>>>>>> 352ec98 (chore :: api 연결)
               {isPlaying ? (
                   <svg viewBox="0 0 24 24">
                     <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
@@ -86,7 +150,10 @@ export default function AudioPlayer({ title, id, total, className, onClick }: Au
                   </svg>
               )}
             </PlayButton>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 352ec98 (chore :: api 연결)
             <TimeText>{total}</TimeText>
           </ControlRow>
         </Info>
@@ -107,7 +174,9 @@ const Card = styled.div`
 const Cover = styled.div`
   width: 100%;
   padding-top: 56.25%;
-  background: #1e1e1e;
+  background-color: #1e1e1e;
+  background-size: cover;
+  background-position: center;
 `;
 
 const Info = styled.div`

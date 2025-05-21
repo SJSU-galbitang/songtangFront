@@ -17,7 +17,7 @@ export default function SurveyMelody() {
   const handleNext = () => {
     if (!feeling) return;
     refetch().then(() => {
-      navigate('/survey/melody', {
+      navigate('/survey/music', {
         state: {
           melodies: surveyData?.melodies,
           lyrics: surveyData?.lyrics,
