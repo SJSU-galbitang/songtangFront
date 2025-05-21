@@ -1,95 +1,82 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
-import font from "@/styles/font.ts";
-import color from "@/styles/color.ts";
-import {useState} from "react";
+import font from '@/styles/font.ts';
+import color from '@/styles/color.ts';
+import AudioPlayer from '@/components/AudioPlayer';
 
-const breakpoints = {
-  mobile: '768px',
-};
+const breakpoints = { mobile: '768px' };
 
-interface MelodyProps {
-  melodies: MelodyData[];
-  onComplete: (selectedMelodyIds: number[]) => void;
+interface Melody {
+  id: string;
+  title: string;
+  length: string;
 }
 
-const SurveyMelody = ({ melodies, onComplete }: MelodyProps) => {
-  const [index, setIndex] = useState(0);
-  const [selected, setSelected] = useState<number[]>([]);
+interface Props {
+  melodies: Melody[];
+  onMelodySelect: (id: string) => void;
+}
 
-  const handleSelect = (id: number) => {
-    setSelected((prev) => [...prev, id]);
-    if (index + 2 < melodies.length) {
-      setTimeout(() => setIndex(index + 2), 2000); // 2초 후 다음 쌍
-    } else {
-      setTimeout(() => onComplete(selected.concat(id)), 2000); // 마지막이면 완료 콜백
-    }
-  };
-
-  const currentPair = melodies.slice(index, index + 2);
-
+export default function SurveyMelody({ melodies, onMelodySelect }: Props) {
   return (
-      <div>
+      <Container>
         <StyledD1>Choose one 🎵</StyledD1>
+
         <AudioPlayerSort>
-          {currentPair.map((melody) => (
-              <SmallPlayer key={melody.id} onClick={() => handleSelect(melody.id)}>
-                <p>{melody.title}</p>
-              </SmallPlayer>
+          {melodies.map(melody => (
+              <SmallPlayer
+                  key={melody.id}
+                  title={melody.title}
+                  id={melody.id}
+                  total={melody.length}
+                  onClick={() => onMelodySelect(melody.id)}
+              />
           ))}
         </AudioPlayerSort>
-      </div>
+      </Container>
   );
-};
+}
 
-export default SurveyMelody;
-
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+`;
 
 const StyledD1 = styled.h1`
   ${font.D1};
   font-size: clamp(2rem, 4vw + 1rem, 3rem);
   color: ${color.white};
-  text-align: center;
   margin: 0;
-  padding: 0 1rem;
-  box-sizing: border-box;
-  width: 100%;
-
-  @media (max-width: ${breakpoints.mobile}) {
-    font-size: clamp(1.5rem, 6vw, 2rem);
-  }
+  text-align: center;
 `;
 
 const AudioPlayerSort = styled.div`
   width: 100vw;
-  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
   box-sizing: border-box;
 
   @media (max-width: ${breakpoints.mobile}) {
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 15px;
-    padding: 0;
+    gap: 1.5rem;
   }
 `;
 
 const SmallPlayer = styled(AudioPlayer)`
   width: 45%;
-  height: auto;
-  transform: scale(0.95);
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
 
   &:hover {
-    transform: scale(1);
+    transform: scale(1.05);
   }
 
   @media (max-width: ${breakpoints.mobile}) {
     width: 90%;
-    transform: scale(1);
   }
 `;

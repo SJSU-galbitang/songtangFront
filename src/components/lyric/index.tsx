@@ -1,72 +1,40 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
-<<<<<<< HEAD:src/pages/survey/lyric/index.tsx
+import font from '@/styles/font.ts';
+import color from '@/styles/color.ts';
 import { useEffect, useState } from 'react';
-import color from '../../../styles/color';
-import font from '../../../styles/font';
-import Logo from '../../../assets/images/SongTangTextLogo.svg';
-import LyricViewer from '../../../components/LyricViewer';
-=======
-import color from '../../styles/color.ts';
-import font from '../../styles/font.ts';
-import Logo from '../../assets/images/SongTangTextLogo.svg';
-import LyricViewer from '../LyricViewer';
->>>>>>> 352ec98 (chore :: api 연결):src/components/lyric/index.tsx
-
-interface MelodyProps {
-  id: string;
-  lyrics: string;
-}
+import { useGetLyrics } from '@/hooks/useSong';
+import LyricViewer from '@/components/LyricViewer';
+import Logo from "@/assets/images/SongTangTextLogo.svg";
 
 interface SurveyLyricProps {
-  lyricsList: MelodyProps[];
-  onSelect: (selectedIds: string[]) => void;
+  lyrics: string[]; // uuid 리스트
+  onComplete: (id: string) => void;
 }
 
-const breakpoints = {
-  mobile: '768px',
-};
+const breakpoints = { mobile: '768px' };
 
-const SurveyLyric = ({ lyricsList, onSelect }: SurveyLyricProps) => {
-  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+export default function SurveyLyric({ lyrics, onComplete }: SurveyLyricProps) {
+  console.log(lyrics);
+  const { data = [], isLoading } = useGetLyrics(lyrics.join(','));
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [currentLyrics, setCurrentLyrics] = useState<{ first: string; second: string }>({
-    first: '',
-    second: '',
-  });
-
-  const handleSelect = (melodyId: string) => {
-    if (!selectedCard) {
-      setSelectedCard(melodyId);
-      setSelectedIds((prev) => [...prev, melodyId]);
-
-      setTimeout(() => {
-        setCurrentIndex((prev) => prev + 2);
-        setSelectedCard(null);
-      }, 2000);
-    }
-  };
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
 
   useEffect(() => {
-    if (currentIndex >= lyricsList.length) {
-      onSelect(selectedIds);
-    }
-  }, [currentIndex, lyricsList.length, selectedIds, onSelect]);
-
-  const first = lyricsList[currentIndex];
-  const second = lyricsList[currentIndex + 1];
-
-  useEffect(() => {
-    if (first && second) {
-      setCurrentLyrics({
-        first: first.lyrics,
-        second: second.lyrics,
-      });
+    if (currentIndex >= lyrics.length) {
+      onComplete(selectedCard!);
     }
   }, [currentIndex]);
 
-  if (!first || !second) return null;
+  if (isLoading || data.length < currentIndex + 2) return null;
+
+  const first = data[currentIndex];
+  const second = data[currentIndex + 1];
+
+  const handleSelect = (id: string) => {
+    setSelectedCard(id);
+    setTimeout(() => setCurrentIndex(prev => prev + 2), 2000);
+  };
 
   return (
       <StyledLyric>
@@ -77,12 +45,12 @@ const SurveyLyric = ({ lyricsList, onSelect }: SurveyLyricProps) => {
           <StyledD1>Choose a Lyrics 📃</StyledD1>
           <LyricViewerSort>
             <LyricViewer
-                lyrics={currentLyrics.first}
+                lyrics={first.lyrics}
                 isSelected={selectedCard === first.id}
                 onClick={() => handleSelect(first.id)}
             />
             <LyricViewer
-                lyrics={currentLyrics.second}
+                lyrics={second.lyrics}
                 isSelected={selectedCard === second.id}
                 onClick={() => handleSelect(second.id)}
             />
@@ -90,9 +58,7 @@ const SurveyLyric = ({ lyricsList, onSelect }: SurveyLyricProps) => {
         </InnerSort>
       </StyledLyric>
   );
-};
-
-export default SurveyLyric;
+}
 
 const StyledLyric = styled.div`
   width: 100%;

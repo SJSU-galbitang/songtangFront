@@ -1,25 +1,15 @@
 import styled from '@emotion/styled';
 import AudioPlayer from '@/components/AudioPlayer';
-import { useNavigate } from 'react-router-dom';
-
-<<<<<<< HEAD
-type ResultPageProps = {
-  title?: string;
-  id?: number;
-  current?: number;
-  total?: string;
-};
-
-export default function ResultPage({
-  title = 'Million Dollar Baby',
-  id = 123123,
-  total = '328',
-}: ResultPageProps) {
-=======
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function ResultPage() {
->>>>>>> 352ec98 (chore :: api 연결)
+  const location = useLocation();
   const navigate = useNavigate();
+    const { title, id, total } = location.state as {
+        title: string;
+        id: string;
+        total: string;
+    };
   return (
     <Wrapper>
       <Header>Here is your result. 🔥</Header>

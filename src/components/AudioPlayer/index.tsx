@@ -1,56 +1,16 @@
-<<<<<<< HEAD
-import { useState, useEffect } from 'react';
-=======
 import { useState, useRef, useEffect, useMemo } from 'react';
->>>>>>> 352ec98 (chore :: api 연결)
 import styled from '@emotion/styled';
 import Copy from '@/assets/icons/copy.svg';
 
 type AudioPlayerProps = {
   title: string;
-<<<<<<< HEAD
-  id: number;
-=======
   id: string;
->>>>>>> 352ec98 (chore :: api 연결)
   total: string;
   className?: string;
   onClick?: () => void;
 };
 
-<<<<<<< HEAD
 export default function AudioPlayer({ title, id, total, className, onClick }: AudioPlayerProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [current, setCurrent] = useState<number>(0);
-
-  const length = total.split(':');
-  const totalSec = Number(length[0]) * 60 + Number(length[1]);
-
-  const percent = (current / totalSec) * 100;
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-
-    if (isPlaying) {
-      interval = setInterval(() => {
-        setCurrent(prev => {
-          if (prev < totalSec) return prev + 1;
-          else {
-            setIsPlaying(false);
-            return prev;
-          }
-        });
-      }, 1000);
-    } else if (!isPlaying && interval) {
-      clearInterval(interval);
-    }
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isPlaying, totalSec]);
-=======
-export default function AudioPlayer({ title, id, total, className }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -72,7 +32,6 @@ export default function AudioPlayer({ title, id, total, className }: AudioPlayer
   };
 
   const copyId = () => navigator.clipboard.writeText(String(id));
->>>>>>> 352ec98 (chore :: api 연결)
 
   const formatTime = (sec: number) => {
     const m = String(Math.floor(sec / 60)).padStart(2, '0');
@@ -89,34 +48,11 @@ export default function AudioPlayer({ title, id, total, className }: AudioPlayer
     };
   }, []);
 
+
   const percent = durationSec ? (current / durationSec) * 100 : 0;
 
   return (
-<<<<<<< HEAD
       <Card className={className} onClick={onClick}>
-        <Cover />
-
-        <Info>
-          <SongInfoWrap>
-            <Title>{title}</Title>
-            <IDRow>
-              <SubTitle>ID: {id}</SubTitle>
-              <CopyButton onClick={(e) => { e.stopPropagation(); copyId(); }}>
-                <img src={Copy} alt="copy icon" />
-              </CopyButton>
-            </IDRow>
-          </SongInfoWrap>
-
-          <ProgressBar>
-            <Progress percent={percent} />
-          </ProgressBar>
-
-          <ControlRow>
-            <TimeText>{formatTime(current)}</TimeText>
-
-            <PlayButton onClick={(e) => { e.stopPropagation(); togglePlay(); }} aria-label={isPlaying ? 'Pause' : 'Play'}>
-=======
-      <Card className={className}>
         <audio ref={audioRef} src={audioSrc} preload="metadata" />
 
         <Cover style={{ backgroundImage: `url(${coverUrl})` }} />
@@ -139,7 +75,6 @@ export default function AudioPlayer({ title, id, total, className }: AudioPlayer
           <ControlRow>
             <TimeText>{formatTime(current)}</TimeText>
             <PlayButton onClick={togglePlay} aria-label={isPlaying ? 'Pause' : 'Play'}>
->>>>>>> 352ec98 (chore :: api 연결)
               {isPlaying ? (
                   <svg viewBox="0 0 24 24">
                     <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
@@ -150,18 +85,12 @@ export default function AudioPlayer({ title, id, total, className }: AudioPlayer
                   </svg>
               )}
             </PlayButton>
-<<<<<<< HEAD
-
-=======
->>>>>>> 352ec98 (chore :: api 연결)
             <TimeText>{total}</TimeText>
           </ControlRow>
         </Info>
       </Card>
   );
 }
-
-// Styled components definitions remain unchanged
 
 const Card = styled.div`
   background: #252525;
