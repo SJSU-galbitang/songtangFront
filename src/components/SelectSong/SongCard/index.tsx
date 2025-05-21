@@ -10,46 +10,60 @@ type SongCardProps = {
   const SongCard = ({ title,length }: SongCardProps) => {
     return (
     <CardList>
-        <Img></Img>
-        <Title>{title}</Title>
-        <Length>{length}</Length>
+        <Img />
+        <TextWrapper>
+          <Title>{title}</Title>
+          <Length>{length}</Length>
+        </TextWrapper>
     </CardList>
     );
   };
 
   const CardList = styled.div`
-    width:257px;
-    height:84px;
-    backgroud-color:${color.gray04};
-    border-radius:8px;
+    width: 80%;
+    height: 100%;
+    background-color: ${color.gray04};
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+    gap: 12px;
   `;
   
   const Img = styled.div`
-    width:64px;
-    height:64px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    backgroud-color:${color.gray04};
+    width: 64px;
+    height: 64px;
+    background-color: ${color.white};
     `;
 
-  const Title = styled.h2`
-    font-family: Pretendard;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 500;
-    display: -webkit-box;
-    width: 160px;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
+  const TextWrapper = styled.div`
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    justify-content: center;
   `;
+  
+const Title = styled.h2`
+  font-family: Pretendard;
+  font-size: 20px;
+  font-weight: 500;
+  color: ${color.white};
+  margin: 0;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 100%;
+  white-space: nowrap;
+  
+`;
 
-  const Length = styled.h3`
-    color: ${color.white};
-    font-family: Pretendard;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 100%;
-  `;
+const Length = styled.h3`
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 400;
+  display: flex;
+  align-items: flex-start;
+  gap:2px;
+  color: ${color.white};
+`;
   export default SongCard;

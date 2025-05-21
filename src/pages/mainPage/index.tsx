@@ -3,14 +3,43 @@ import color from '@/styles/color';
 import SongCard from '@/components/SelectSong/SongCard';
 import SongTangLogo from '../../assets/images/SongTangTextLogo.svg';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
+interface Melody {
+  id: string;
+  title: string;
+  length: string;
+}
+
+interface ApiResponse {
+  melodies: Melody[];
+  lyrics: string[];
+}
 
 const HomePage = () => {
-
-  const title: string = "test";
-  const id: string = "adsfadf";
-  const length: string = "03:28";
-
   const navigate = useNavigate();
+  const [recentSongs, setRecentSongs] = useState<Melody[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    const fetchSongs = async () => {
+      try {
+        const response = await fetch('https://port-0-songtang-m2vzc8ul0ad93b09.sel4.cloudtype.app/survey?emotion=happy');
+        const data: ApiResponse = await response.json();
+        setRecentSongs(data.melodies);
+      } catch (error) {
+        console.error('Error fetching songs:', error);
+      }
+    };
+
+    fetchSongs();
+  }, []);
+
+  const filteredSongs = recentSongs.filter(song => 
+    song.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    song.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <Container>
       <Main>
@@ -21,10 +50,35 @@ const HomePage = () => {
       </Main>
       <Sidebar>
         <Label htmlFor="searchSong">Find a song</Label>
-        <Input placeholder="Enter song ID" />
+        <Input 
+          placeholder="Enter song ID or title" 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        {searchTerm && (
+          <>
+            <SongCardList>
+              {filteredSongs.map((song) => (
+                <SongCard
+                  key={song.id}
+                  id={song.id}
+                  title={song.title}
+                  length={song.length}
+                />
+              ))}
+            </SongCardList>
+          </>
+        )}
         <SectionTitle>Recent Creations</SectionTitle>
         <SongCardList>
-          <SongCard title={title} id={id} length={length} />
+          {recentSongs.map((song) => (
+            <SongCard
+              key={song.id}
+              id={song.id}
+              title={song.title}
+              length={song.length}
+            />
+          ))}
         </SongCardList>
       </Sidebar>
     </Container>
@@ -120,7 +174,7 @@ const SectionTitle = styled.h2`
 const SongCardList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 16px;
 `;
 
 export default HomePage;
