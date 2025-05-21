@@ -28,7 +28,6 @@ export default function ResultPage() {
       <Header>Here is your result. 🔥</Header>
       <AudioPlayer title={title} id={id} total={total} />
       <BackButton onClick={handleBack}>Back to Home</BackButton>
-      <AddButton onClick={handleBack}>Go to Recently Created</AddButton>
     </Wrapper>
   );
 }
@@ -62,21 +61,5 @@ const BackButton = styled.button`
   transition: opacity 0.2s;
   &:hover {
     opacity: 0.9;
-  }
-`;
-
-// 최근 생성 목록으로 이동하는 버튼
-const AddButton = styled.button`
-  margin-top: 16px;
-  padding: 12px 80px;
-  background: #333;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  &:hover {
-    opacity: 0.8;
   }
 `;
