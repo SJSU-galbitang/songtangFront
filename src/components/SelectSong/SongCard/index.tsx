@@ -7,10 +7,12 @@ type SongCardProps = {
     length: string;
   };
   
-  const SongCard = ({ title,length }: SongCardProps) => {
+  const SongCard = ({ id, title,length }: SongCardProps) => {
+    const img = `https://cdn2.suno.ai/image_${id}.jpeg`
+    
     return (
     <CardList>
-        <Img />
+        <Img src={img} />
         <TextWrapper>
           <Title>{title}</Title>
           <Length>{length}</Length>
@@ -30,7 +32,7 @@ type SongCardProps = {
     gap: 12px;
   `;
   
-  const Img = styled.div`
+  const Img = styled.img`
     width: 64px;
     height: 64px;
     background-color: ${color.white};

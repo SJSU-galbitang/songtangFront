@@ -4,6 +4,7 @@ import SongCard from '@/components/SelectSong/SongCard';
 import SongTangLogo from '../../assets/images/SongTangTextLogo.svg';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useSong } from '@/hooks/useSong';
 
 interface Melody {
   id: string;
@@ -11,34 +12,33 @@ interface Melody {
   length: string;
 }
 
-interface ApiResponse {
-  melodies: Melody[];
-  lyrics: string[];
-}
-
 const HomePage = () => {
   const navigate = useNavigate();
   const [recentSongs, setRecentSongs] = useState<Melody[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const { data } = useSong(searchTerm);
 
   useEffect(() => {
-    const fetchSongs = async () => {
-      try {
-        const response = await fetch('https://port-0-songtang-m2vzc8ul0ad93b09.sel4.cloudtype.app/survey?emotion=happy');
-        const data: ApiResponse = await response.json();
-        setRecentSongs(data.melodies);
-      } catch (error) {
-        console.error('Error fetching songs:', error);
-      }
-    };
+    if (data?.id && data?.title && data?.length) {
+      const recents = JSON.parse(localStorage.getItem('recentSongs') || '[]');
 
-    fetchSongs();
-  }, []);
+      const updated = recents.filter((song: any) => song.id !== data.id);
+      updated.unshift({
+        id: data.id,
+        title: data.title,
+        length: data.length,
+      });
+      if (updated.length > 10) updated.pop();
 
-  const filteredSongs = recentSongs.filter(song => 
-    song.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    song.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      localStorage.setItem('recentSongs', JSON.stringify(updated));
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem('recentSongs') || '[]');
+    const songs: Melody[] = stored;
+    setRecentSongs(songs);
+  }, [data]);
 
   return (
     <Container>
@@ -46,29 +46,26 @@ const HomePage = () => {
         <Logo>
           <img src={SongTangLogo} alt="Songtang" />
         </Logo>
-        <StartButton onClick={() => navigate('/')}>Start Test</StartButton>
+        <StartButton onClick={() => navigate('/survey')}>Start Test</StartButton>
       </Main>
+
       <Sidebar>
         <Label htmlFor="searchSong">Find a song</Label>
-        <Input 
-          placeholder="Enter song ID or title" 
+        <Input
+          placeholder="Enter song ID or title"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        {searchTerm && (
-          <>
-            <SongCardList>
-              {filteredSongs.map((song) => (
-                <SongCard
-                  key={song.id}
-                  id={song.id}
-                  title={song.title}
-                  length={song.length}
-                />
-              ))}
-            </SongCardList>
-          </>
+        {searchTerm && data?.id && (
+          <SongCardList>
+            <SongCard
+              id={data.id}
+              title={data.title}
+              length={data.length}
+            />
+          </SongCardList>
         )}
+
         <SectionTitle>Recent Creations</SectionTitle>
         <SongCardList>
           {recentSongs.map((song) => (
@@ -120,6 +117,7 @@ const StartButton = styled.button`
   width: 487px;
   text-align: center;
   font-size: 32px;
+  cursor: pointer;
 `;
 
 const Sidebar = styled.aside`
@@ -157,13 +155,13 @@ const Label = styled.label`
   font-style: normal;
   font-weight: 500;
   line-height: 100%;
-  text-align:left;
+  text-align: left;
 `;
 
 const SectionTitle = styled.h2`
   font-size: 24px;
   margin-top: 2rem;
-  text-align:left;
+  text-align: left;
   margin-bottom: 0.5rem;
   font-family: Pretendard;
   font-style: normal;
