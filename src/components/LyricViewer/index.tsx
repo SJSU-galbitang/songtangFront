@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import font from '../../styles/font';
 import color from '@/styles/color.ts';
+import { useGetLyrics } from "@/hooks/useSong.ts";
 
 interface LyricViewerProps {
     lyrics: string;
-    isSelected: boolean;
     onClick: () => void;
 }
 
@@ -12,17 +12,21 @@ const breakpoints = {
     mobile: '768px',
 };
 
-const LyricViewer = ({ lyrics, isSelected, onClick }: LyricViewerProps) => {
+const LyricViewer = ({ lyrics, onClick }: LyricViewerProps) => {
+
+    const { data } = useGetLyrics(lyrics);
+    console.log(data)
+
     return (
-        <Card isSelected={isSelected} onClick={onClick}>
-            <StyledP>{lyrics}</StyledP>
+        <Card onClick={onClick}>
+            <StyledP>{data?.lyrics}</StyledP>
         </Card>
     );
 };
 
 export default LyricViewer;
 
-const Card = styled.div<{ isSelected: boolean }>`
+const Card = styled.div`
   background: #252525;
   border-radius: 16px;
   display: flex;

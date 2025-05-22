@@ -23,7 +23,7 @@ export default function SurveyMelody({ melodies, onMelodySelect }: Props) {
         <StyledD1>Choose one 🎵</StyledD1>
 
         <AudioPlayerSort>
-          {melodies.map(melody => (
+          {melodies.map (melody => (
               <SmallPlayer
                   key={melody.id}
                   title={melody.title}

@@ -2,49 +2,30 @@
 import styled from '@emotion/styled';
 import font from '@/styles/font.ts';
 import color from '@/styles/color.ts';
-import { useEffect, useState } from 'react';
-import { useGetLyrics } from '@/hooks/useSong';
 import LyricViewer from '@/components/LyricViewer';
-import Logo from "@/assets/images/SongTangTextLogo.svg";
 
-interface SurveyLyricProps {
-  lyrics: string[]; // uuid 리스트
-  onComplete: (id: string) => void;
+interface Lyric {
+  id:string;
 }
-
+interface Props {
+  lyrics: Lyric[];
+  onLyricSelect: (id: string) => void;
+}
 const breakpoints = { mobile: '768px' };
 
-export default function SurveyLyric({ lyrics, onComplete }: SurveyLyricProps) {
-  console.log(lyrics);
-  const { data = [], isLoading } = useGetLyrics(lyrics.join(','));
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedCard, setSelectedCard] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (currentIndex >= lyrics.length) {
-      onComplete(selectedCard!);
-    }
-  }, [currentIndex]);
-
-  if (isLoading || data.length < currentIndex + 2) return null;
-
-  const first = data[currentIndex];
-  const second = data[currentIndex + 1];
-
-  const handleSelect = (id: string) => {
-    setSelectedCard(id);
-    setTimeout(() => setCurrentIndex(prev => prev + 2), 2000);
-  };
+export default function SurveyLyric({ lyrics, onLyricSelect }: Props ) {
 
   return (
-      <StyledLyric>
-        <InnerSort>
-          <LogoSort>
-            <StyledLogo src={Logo} alt="SongTang logo" />
-          </LogoSort>
-          <StyledD1>Choose a Lyrics 📃</StyledD1>
-          <LyricViewerSort>
-            <LyricViewer
+      <>
+        <StyledD1>Choose a Lyrics 📃</StyledD1>
+        <LyricViewerSort>
+          {lyrics.map((lyric) => (
+              <LyricViewer
+                  key={lyric.id}
+                  lyrics={lyric}
+                  onClick={() => onLyricSelect(lyric.id)}/>
+          ))}
+          {/*            <LyricViewer
                 lyrics={first.lyrics}
                 isSelected={selectedCard === first.id}
                 onClick={() => handleSelect(first.id)}
@@ -53,46 +34,12 @@ export default function SurveyLyric({ lyrics, onComplete }: SurveyLyricProps) {
                 lyrics={second.lyrics}
                 isSelected={selectedCard === second.id}
                 onClick={() => handleSelect(second.id)}
-            />
-          </LyricViewerSort>
-        </InnerSort>
-      </StyledLyric>
+            />*/}
+        </LyricViewerSort>
+      </>
   );
 }
 
-const StyledLyric = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  background: ${color.gradient.background};
-  box-sizing: border-box;
-  overflow-y: auto;
-
-  @media (max-width: ${breakpoints.mobile}) {
-    padding: 1.5rem 0.5rem;
-    align-items: flex-start;
-    justify-content: center;
-  }
-`;
-
-const InnerSort = styled.div`
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  justify-content: flex-start;
-  gap: 4vh;
-  box-sizing: border-box;
-
-  @media (max-width: ${breakpoints.mobile}) {
-    gap: 3vh;
-    width: 95%;
-    display: flex;
-  }
-`;
 
 const LogoSort = styled.div`
   width: 100%;

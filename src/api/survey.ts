@@ -29,12 +29,3 @@ export const createSong = async (melodies: string[], lyrics: string[]): Promise<
     return Promise.reject(err);
   }
 }
-
-export const submitSurveyResult = async (data: { selectedIds: string[] }) => {
-  try {
-    const res = await api.post('/survey', data);
-    return handleResponse(res);
-  } catch(err) {
-    return Promise.reject(err);
-  }
-};

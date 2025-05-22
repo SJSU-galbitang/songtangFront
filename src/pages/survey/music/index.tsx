@@ -1,18 +1,21 @@
-/** @jsxImportSource @emotion/react */
+ /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
 import color from '../../../styles/color';
 import Logo from '../../../assets/images/SongTangTextLogo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
-import SurveyMelody from '@/components/melody/index';
-import SurveyLyric  from '@/components/lyric/index';
+import SurveyMelody from '@/components/melody';
+import SurveyLyric from '@/components/lyric';
 import { useState, useEffect } from 'react';
+import { useCreateSong } from "@/hooks/useSurvey.ts";
 
-const breakpoints = { mobile: '768px' };
+ const breakpoints = { mobile: '768px' };
 
 export default function SurveyMusic() {
     const location = useLocation();
     const navigate = useNavigate();
     const { melodies = [], lyrics = [] } = location.state || {};
+
+    const { mutate: createSong } = useCreateSong();
 
     const [step, setStep] = useState<'melody' | 'lyric'>('melody');
     const [melodyIndex, setMelodyIndex] = useState(0);
@@ -23,7 +26,7 @@ export default function SurveyMusic() {
     const chunkSize = 2;
     const currentMelodies = melodies.slice(melodyIndex, melodyIndex + chunkSize);
     const currentLyrics    = lyrics.slice(lyricIndex, lyricIndex + chunkSize);
-    console.log("currentLyrics: "+currentLyrics);
+    console.log(location.state);
 
     // 디버깅용
     useEffect(() => {
@@ -45,15 +48,27 @@ export default function SurveyMusic() {
 
     const handleLyricSelect = (id: string) => {
         console.log('selected lyric:', id);
-        setSelectedLyricIds(prev => [...prev, id]);
+        const newSelected = [...selectedLyricIds, id];
+        setSelectedLyricIds(newSelected);
 
         if (lyricIndex + chunkSize >= lyrics.length) {
-            navigate('/result', {
-                state: {
+            console.log("멜로디선택:"+selectedLyricIds, "가사선택"+selectedLyricIds);
+            createSong(
+                {
                     melodies: selectedMelodyIds,
-                    lyrics:   selectedLyricIds,
+                    lyrics: selectedLyricIds,
                 },
-            });
+                {
+                    onSuccess: () => {
+                        navigate('/result', {
+                            state: {
+                                melodies: selectedMelodyIds,
+                                lyrics:   newSelected,
+                            },
+                        });
+                    }
+                }
+            );
         } else {
             setLyricIndex(prev => prev + chunkSize);
         }
@@ -74,7 +89,7 @@ export default function SurveyMusic() {
                 )}
 
                 {step === 'lyric' && currentLyrics.length > 0 && (
-                    <SurveyLyric lyrics={currentLyrics.map(l => l.text)} onComplete={handleLyricSelect} />
+                    <SurveyLyric lyrics={currentLyrics} onLyricSelect={handleLyricSelect} />
                 )}
             </InnerSort>
         </StyledTestSong>
