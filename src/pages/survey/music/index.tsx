@@ -26,7 +26,7 @@ export default function SurveyMusic() {
     const chunkSize = 2;
     const currentMelodies = melodies.slice(melodyIndex, melodyIndex + chunkSize);
     const currentLyrics    = lyrics.slice(lyricIndex, lyricIndex + chunkSize);
-    console.log(location.state);
+    console.log("커렌트리릭"+currentLyrics)
 
     // 디버깅용
     useEffect(() => {
