@@ -21,13 +21,11 @@ export default function ResultPage() {
     }
   }, [id]);
 
-  const handleBack = () => navigate('/');
-
   return (
     <Wrapper>
       <Header>Here is your result. 🔥</Header>
       <AudioPlayer title={title} id={id} total={total} />
-      <BackButton onClick={handleBack}>Back to Home</BackButton>
+      <BackButton onClick={() => navigate('/')}>Back to Home</BackButton>
     </Wrapper>
   );
 }

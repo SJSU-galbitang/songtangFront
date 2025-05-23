@@ -7,9 +7,10 @@ type AudioPlayerProps = {
   id: string;
   total: string;
   className?: string;
+  onClick?: () => void;
 };
 
-export default function AudioPlayer({ title, id, total, className }: AudioPlayerProps) {
+export default function AudioPlayer({ title, id, total, className, onClick }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -50,43 +51,43 @@ export default function AudioPlayer({ title, id, total, className }: AudioPlayer
   const percent = durationSec ? (current / durationSec) * 100 : 0;
 
   return (
-    <Card className={className}>
-      <audio ref={audioRef} src={audioSrc} preload="metadata" />
+      <Card className={className} onClick={onClick}>
+        <audio ref={audioRef} src={audioSrc} preload="metadata" />
 
-      <Cover style={{ backgroundImage: `url(${coverUrl})` }} />
+        <Cover style={{ backgroundImage: `url(${coverUrl})` }} />
 
-      <Info>
-        <SongInfoWrap>
-          <Title>{title}</Title>
-          <IDRow>
-            <SubTitle>ID: {id}</SubTitle>
-            <CopyButton onClick={copyId}>
-              <img src={Copy} alt="copy icon" />
-            </CopyButton>
-          </IDRow>
-        </SongInfoWrap>
+        <Info>
+          <SongInfoWrap>
+            <Title>{title}</Title>
+            <IDRow>
+              <SubTitle>ID: {id}</SubTitle>
+              <CopyButton onClick={copyId}>
+                <img src={Copy} alt="copy icon" />
+              </CopyButton>
+            </IDRow>
+          </SongInfoWrap>
 
-        <ProgressBar>
-          <Progress percent={percent} />
-        </ProgressBar>
+          <ProgressBar>
+            <Progress percent={percent} />
+          </ProgressBar>
 
-        <ControlRow>
-          <TimeText>{formatTime(current)}</TimeText>
-          <PlayButton onClick={togglePlay} aria-label={isPlaying ? 'Pause' : 'Play'}>
-            {isPlaying ? (
-              <svg viewBox="0 0 24 24">
-                <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            )}
-          </PlayButton>
-          <TimeText>{total}</TimeText>
-        </ControlRow>
-      </Info>
-    </Card>
+          <ControlRow>
+            <TimeText>{formatTime(current)}</TimeText>
+            <PlayButton onClick={togglePlay} aria-label={isPlaying ? 'Pause' : 'Play'}>
+              {isPlaying ? (
+                  <svg viewBox="0 0 24 24">
+                    <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
+                  </svg>
+              ) : (
+                  <svg viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+              )}
+            </PlayButton>
+            <TimeText>{total}</TimeText>
+          </ControlRow>
+        </Info>
+      </Card>
   );
 }
 
