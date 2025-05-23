@@ -5,10 +5,10 @@ import Logo from '../../../assets/images/SongTangTextLogo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SurveyMelody from '@/components/melody';
 import SurveyLyric from '@/components/lyric';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useCreateSong } from "@/hooks/useSurvey.ts";
 
- const breakpoints = { mobile: '768px' };
+const breakpoints = { mobile: '768px' };
 
 export default function SurveyMusic() {
     const location = useLocation();
@@ -25,19 +25,12 @@ export default function SurveyMusic() {
 
     const chunkSize = 2;
     const currentMelodies = melodies.slice(melodyIndex, melodyIndex + chunkSize);
-    const currentLyrics    = lyrics.slice(lyricIndex, lyricIndex + chunkSize);
-    console.log(location.state);
-
-    // 디버깅용
-    useEffect(() => {
-        console.log('step:', step);
-        console.log('melodyIndex:', melodyIndex, 'currentMelodies:', currentMelodies);
-        console.log('lyricIndex:', lyricIndex, 'currentLyrics:', currentLyrics);
-    }, [step, melodyIndex, lyricIndex]);
+    const currentLyrics = lyrics.slice(lyricIndex, lyricIndex + chunkSize);
 
     const handleMelodySelect = (id: string) => {
         console.log('selected melody:', id);
         setSelectedMelodyIds(prev => [...prev, id]);
+        console.log("뮤직 페이지에서 선택된 아이디: "+selectedMelodyIds)
 
         if (melodyIndex + chunkSize >= melodies.length) {
             setStep('lyric');
@@ -52,18 +45,19 @@ export default function SurveyMusic() {
         setSelectedLyricIds(newSelected);
 
         if (lyricIndex + chunkSize >= lyrics.length) {
-            console.log("멜로디선택:"+selectedLyricIds, "가사선택"+selectedLyricIds);
+            console.log("멜로디선택:"+selectedMelodyIds, "가사선택"+newSelected);
             createSong(
                 {
                     melodies: selectedMelodyIds,
-                    lyrics: selectedLyricIds,
+                    lyrics: newSelected,
                 },
                 {
-                    onSuccess: () => {
+                    onSuccess: (song) => {
                         navigate('/result', {
                             state: {
-                                melodies: selectedMelodyIds,
-                                lyrics:   newSelected,
+                                title: song.title,
+                                id: song.id,
+                                total: song.total
                             },
                         });
                     }

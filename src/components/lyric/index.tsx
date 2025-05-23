@@ -22,7 +22,7 @@ export default function SurveyLyric({ lyrics, onLyricSelect }: Props ) {
           {lyrics.map((lyric) => (
               <LyricViewer
                   key={lyric.id}
-                  lyrics={lyric}
+                  lyrics={lyric.id}
                   onClick={() => onLyricSelect(lyric.id)}/>
           ))}
           {/*            <LyricViewer

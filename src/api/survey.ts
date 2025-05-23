@@ -1,5 +1,5 @@
 import api from '@/lib/customAxios';
-import type { SurveyResponse } from '@/types/survey';
+import type { SurveyResponse, SurveyCreateResponse } from '@/types/survey';
 
 const handleResponse = (res: { status: number; data: any }) => {
   if (res.status < 200 || res.status >= 300) {
@@ -21,7 +21,7 @@ export const fetchSurvey = async (emotion: string) => {
   }
 }
 
-export const createSong = async (melodies: string[], lyrics: string[]): Promise<SurveyResponse> => {
+export const createSong = async (melodies: string[], lyrics: string[]): Promise<SurveyCreateResponse> => {
   try {
     const res = await api.post('/song', { melodies, lyrics });
     return handleResponse(res);

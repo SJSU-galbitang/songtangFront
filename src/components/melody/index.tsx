@@ -29,7 +29,9 @@ export default function SurveyMelody({ melodies, onMelodySelect }: Props) {
                   title={melody.title}
                   id={melody.id}
                   total={melody.length}
-                  onClick={() => onMelodySelect(melody.id)}
+                  onClick={() => {
+                    onMelodySelect(melody.id);
+                  }}
               />
           ))}
         </AudioPlayerSort>
