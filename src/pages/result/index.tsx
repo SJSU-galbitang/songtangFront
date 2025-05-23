@@ -1,15 +1,26 @@
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import AudioPlayer from '@/components/AudioPlayer';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function ResultPage() {
-  const location = useLocation();
   const navigate = useNavigate();
-    const { title, id, total } = location.state as {
-        title: string;
-        id: string;
-        total: string;
-    };
+  const location = useLocation();
+  const { title, id, total } = location.state as {
+    title: string;
+    id: string;
+    total: string;
+  };
+
+  useEffect(() => {
+    const recents = JSON.parse(localStorage.getItem('recentSongs') || '[]');
+    if (!recents.includes(id)) {
+      recents.unshift(id);
+      if (recents.length > 10) recents.pop();
+      localStorage.setItem('recentSongs', JSON.stringify(recents));
+    }
+  }, [id]);
+
   return (
     <Wrapper>
       <Header>Here is your result. 🔥</Header>
