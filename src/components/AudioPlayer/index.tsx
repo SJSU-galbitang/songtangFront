@@ -48,7 +48,6 @@ export default function AudioPlayer({ title, id, total, className, onClick }: Au
     };
   }, []);
 
-
   const percent = durationSec ? (current / durationSec) * 100 : 0;
 
   return (
