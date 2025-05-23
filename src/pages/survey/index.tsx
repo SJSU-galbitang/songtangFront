@@ -11,7 +11,7 @@ const breakpoints = {
 export default function SurveyMelody() {
   const navigate = useNavigate();
   const [feeling, setFeeling] = useState<string>('');
-  const { data: surveyData, refetch, isFetching } = useSurvey(feeling);
+  const { refetch, isFetching } = useSurvey(feeling);
 
   const handleNext = () => {
     if (!feeling) return;
