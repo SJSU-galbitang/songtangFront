@@ -40,28 +40,6 @@ export default function SurveyLyric({ lyrics, onLyricSelect }: Props ) {
   );
 }
 
-
-const LogoSort = styled.div`
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-`;
-
-const StyledLogo = styled.img`
-  display: block;
-  width: 30%;
-  max-width: 300px;
-  height: auto;
-  margin: 0;
-
-  @media (max-width: ${breakpoints.mobile}) {
-    width: 50%;
-    max-width: 100px;
-  }
-`;
-
 const StyledD1 = styled.h1`
   ${font.D1};
   font-size: clamp(2rem, 4vw + 1rem, 3rem);
