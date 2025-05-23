@@ -1,18 +1,37 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import styled from '@emotion/styled';
 import Copy from '@/assets/icons/copy.svg';
 
 type AudioPlayerProps = {
   title: string;
-  id: number;
-  current: number;
-  total: number;
+  id: string;
+  total: string;
   className?: string;
+  onClick?: () => void;
 };
 
-export default function AudioPlayer({ title, id, current, total, className }: AudioPlayerProps) {
+export default function AudioPlayer({ title, id, total, className, onClick }: AudioPlayerProps) {
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const percent = (current / total) * 100;
+  const [current, setCurrent] = useState(0);
+
+  const audioSrc = `https://cdn1.suno.ai/${id}.mp3`;
+  const coverUrl = `https://cdn2.suno.ai/image_${id}.jpeg`;
+
+  const durationSec = useMemo(() => {
+    const [m, s] = total.split(':').map(Number);
+    return m * 60 + s;
+  }, [total]);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (isPlaying) audio.pause();
+    else audio.play();
+    setIsPlaying(!isPlaying);
+  };
+
+  const copyId = () => navigator.clipboard.writeText(String(id));
 
   const formatTime = (sec: number) => {
     const m = String(Math.floor(sec / 60)).padStart(2, '0');
@@ -20,50 +39,55 @@ export default function AudioPlayer({ title, id, current, total, className }: Au
     return `${m}:${s}`;
   };
 
-  const copyId = () => navigator.clipboard.writeText(String(id));
+  useEffect(() => {
+    const audio = audioRef.current!;
+    const onTimeUpdate = () => setCurrent(audio.currentTime);
+    audio.addEventListener('timeupdate', onTimeUpdate);
+    return () => {
+      audio.removeEventListener('timeupdate', onTimeUpdate);
+    };
+  }, []);
 
-  const togglePlay = () => {
-    setIsPlaying(prev => !prev);
-  };
+  const percent = durationSec ? (current / durationSec) * 100 : 0;
 
   return (
-    <Card className={className}>
-      <Cover />
+      <Card className={className} onClick={onClick}>
+        <audio ref={audioRef} src={audioSrc} preload="metadata" />
 
-      <Info>
-        <SongInfoWrap>
-          <Title>{title}</Title>
-          <IDRow>
-            <SubTitle>ID: {id}</SubTitle>
-            <CopyButton onClick={copyId}>
-              <img src={Copy} alt="copy icon" />
-            </CopyButton>
-          </IDRow>
-        </SongInfoWrap>
+        <Cover style={{ backgroundImage: `url(${coverUrl})` }} />
 
-        <ProgressBar>
-          <Progress percent={percent} />
-        </ProgressBar>
+        <Info>
+          <SongInfoWrap>
+            <Title>{title}</Title>
+            <IDRow>
+              <SubTitle>ID: {id}</SubTitle>
+              <CopyButton onClick={copyId}>
+                <img src={Copy} alt="copy icon" />
+              </CopyButton>
+            </IDRow>
+          </SongInfoWrap>
 
-        <ControlRow>
-          <TimeText>{formatTime(current)}</TimeText>
+          <ProgressBar>
+            <Progress percent={percent} />
+          </ProgressBar>
 
-          <PlayButton onClick={togglePlay} aria-label={isPlaying ? 'Pause' : 'Play'}>
-            {isPlaying ? (
-              <svg viewBox="0 0 24 24">
-                <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            )}
-          </PlayButton>
-
-          <TimeText>{formatTime(total)}</TimeText>
-        </ControlRow>
-      </Info>
-    </Card>
+          <ControlRow>
+            <TimeText>{formatTime(current)}</TimeText>
+            <PlayButton onClick={togglePlay} aria-label={isPlaying ? 'Pause' : 'Play'}>
+              {isPlaying ? (
+                  <svg viewBox="0 0 24 24">
+                    <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
+                  </svg>
+              ) : (
+                  <svg viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+              )}
+            </PlayButton>
+            <TimeText>{total}</TimeText>
+          </ControlRow>
+        </Info>
+      </Card>
   );
 }
 
@@ -78,7 +102,9 @@ const Card = styled.div`
 const Cover = styled.div`
   width: 100%;
   padding-top: 56.25%;
-  background: #1e1e1e;
+  background-color: #1e1e1e;
+  background-size: cover;
+  background-position: center;
 `;
 
 const Info = styled.div`

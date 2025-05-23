@@ -1,25 +1,30 @@
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import AudioPlayer from '@/components/AudioPlayer';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
-type ResultPageProps = {
-  title?: string;
-  id?: number;
-  current?: number;
-  total?: number;
-};
-
-export default function ResultPage({
-  title = 'Million Dollar Baby',
-  id = 123123,
-  current = 128,
-  total = 328,
-}: ResultPageProps) {
+export default function ResultPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { title, id, total } = location.state as {
+    title: string;
+    id: string;
+    total: string;
+  };
+
+  useEffect(() => {
+    const recents = JSON.parse(localStorage.getItem('recentSongs') || '[]');
+    if (!recents.includes(id)) {
+      recents.unshift(id);
+      if (recents.length > 10) recents.pop();
+      localStorage.setItem('recentSongs', JSON.stringify(recents));
+    }
+  }, [id]);
+
   return (
     <Wrapper>
       <Header>Here is your result. 🔥</Header>
-      <AudioPlayer title={title} id={id} current={current} total={total} />
+      <AudioPlayer title={title} id={id} total={total} />
       <BackButton onClick={() => navigate('/')}>Back to Home</BackButton>
     </Wrapper>
   );
