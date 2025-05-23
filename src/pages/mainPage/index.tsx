@@ -3,28 +3,79 @@ import color from '@/styles/color';
 import SongCard from '@/components/SelectSong/SongCard';
 import SongTangLogo from '../../assets/images/SongTangTextLogo.svg';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useSong } from '@/hooks/useSong';
+
+interface Melody {
+  id: string;
+  title: string;
+  length: string;
+}
 
 const HomePage = () => {
-
-  const title: string = "test";
-  const id: string = "adsfadf";
-  const length: string = "03:28";
-
   const navigate = useNavigate();
+  const [recentSongs, setRecentSongs] = useState<Melody[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const { data } = useSong(searchTerm);
+
+  useEffect(() => {
+    if (data?.id && data?.title && data?.length) {
+      const recents = JSON.parse(localStorage.getItem('recentSongs') || '[]');
+
+      const updated = recents.filter((song: any) => song.id !== data.id);
+      updated.unshift({
+        id: data.id,
+        title: data.title,
+        length: data.length,
+      });
+      if (updated.length > 10) updated.pop();
+
+      localStorage.setItem('recentSongs', JSON.stringify(updated));
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem('recentSongs') || '[]');
+    const songs: Melody[] = stored;
+    setRecentSongs(songs);
+  }, [data]);
+
   return (
     <Container>
       <Main>
         <Logo>
           <img src={SongTangLogo} alt="Songtang" />
         </Logo>
-        <StartButton onClick={() => navigate('/')}>Start Test</StartButton>
+        <StartButton onClick={() => navigate('/survey')}>Start Test</StartButton>
       </Main>
+
       <Sidebar>
         <Label htmlFor="searchSong">Find a song</Label>
-        <Input placeholder="Enter song ID" />
+        <Input
+          placeholder="Enter song ID or title"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        {searchTerm && data?.id && (
+          <SongCardList>
+            <SongCard
+              id={data.id}
+              title={data.title}
+              length={data.length}
+            />
+          </SongCardList>
+        )}
+
         <SectionTitle>Recent Creations</SectionTitle>
         <SongCardList>
-          <SongCard title={title} id={id} length={length} />
+          {recentSongs.map((song) => (
+            <SongCard
+              key={song.id}
+              id={song.id}
+              title={song.title}
+              length={song.length}
+            />
+          ))}
         </SongCardList>
       </Sidebar>
     </Container>
@@ -66,6 +117,7 @@ const StartButton = styled.button`
   width: 487px;
   text-align: center;
   font-size: 32px;
+  cursor: pointer;
 `;
 
 const Sidebar = styled.aside`
@@ -103,13 +155,13 @@ const Label = styled.label`
   font-style: normal;
   font-weight: 500;
   line-height: 100%;
-  text-align:left;
+  text-align: left;
 `;
 
 const SectionTitle = styled.h2`
   font-size: 24px;
   margin-top: 2rem;
-  text-align:left;
+  text-align: left;
   margin-bottom: 0.5rem;
   font-family: Pretendard;
   font-style: normal;
@@ -120,7 +172,7 @@ const SectionTitle = styled.h2`
 const SongCardList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 16px;
 `;
 
 export default HomePage;
