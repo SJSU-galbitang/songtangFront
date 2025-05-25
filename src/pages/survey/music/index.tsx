@@ -28,9 +28,7 @@ export default function SurveyMusic() {
     const currentLyrics = lyrics.slice(lyricIndex, lyricIndex + chunkSize);
 
     const handleMelodySelect = (id: string) => {
-        console.log('selected melody:', id);
         setSelectedMelodyIds(prev => [...prev, id]);
-        console.log("뮤직 페이지에서 선택된 아이디: "+selectedMelodyIds)
 
         if (melodyIndex + chunkSize >= melodies.length) {
             setStep('lyric');
@@ -57,7 +55,7 @@ export default function SurveyMusic() {
                             state: {
                                 title: song.title,
                                 id: song.id,
-                                total: song.total
+                                total: song.length
                             },
                         });
                     }

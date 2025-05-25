@@ -13,7 +13,7 @@ const breakpoints = {
 };
 
 const LyricViewer = ({ lyrics, onClick }: LyricViewerProps) => {
-
+    console.log("가사뷰어에서의 가사: "+lyrics)
     const { data } = useGetLyrics(lyrics);
     console.log(data)
 

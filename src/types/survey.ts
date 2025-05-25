@@ -6,5 +6,5 @@ export type SurveyResponse = {
 export type SurveyCreateResponse = {
   id: string;
   title: string;
-  total: string;
+  length: string;
 }

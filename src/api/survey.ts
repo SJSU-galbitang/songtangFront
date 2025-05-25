@@ -21,9 +21,9 @@ export const fetchSurvey = async (emotion: string) => {
   }
 }
 
-export const createSong = async (melodies: string[], lyrics: string[]): Promise<SurveyCreateResponse> => {
+export const createSong = async (melody_ids: string[], lyrics_ids: string[]): Promise<SurveyCreateResponse> => {
   try {
-    const res = await api.post('/song', { melodies, lyrics });
+    const res = await api.post('/song', { melody_ids, lyrics_ids });
     return handleResponse(res);
   } catch(err) {
     return Promise.reject(err);

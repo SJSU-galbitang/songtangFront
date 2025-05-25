@@ -4,37 +4,24 @@ import font from '@/styles/font.ts';
 import color from '@/styles/color.ts';
 import LyricViewer from '@/components/LyricViewer';
 
-interface Lyric {
-  id:string;
-}
 interface Props {
-  lyrics: Lyric[];
+  lyrics: string[];
   onLyricSelect: (id: string) => void;
 }
 const breakpoints = { mobile: '768px' };
 
 export default function SurveyLyric({ lyrics, onLyricSelect }: Props ) {
-
+  console.log("설베이리릭에서의 가사: "+lyrics)
   return (
       <>
         <StyledD1>Choose a Lyrics 📃</StyledD1>
         <LyricViewerSort>
           {lyrics.map((lyric) => (
               <LyricViewer
-                  key={lyric.id}
-                  lyrics={lyric.id}
-                  onClick={() => onLyricSelect(lyric.id)}/>
+                  key={lyric}
+                  lyrics={lyric}
+                  onClick={() => onLyricSelect(lyric)}/>
           ))}
-          {/*            <LyricViewer
-                lyrics={first.lyrics}
-                isSelected={selectedCard === first.id}
-                onClick={() => handleSelect(first.id)}
-            />
-            <LyricViewer
-                lyrics={second.lyrics}
-                isSelected={selectedCard === second.id}
-                onClick={() => handleSelect(second.id)}
-            />*/}
         </LyricViewerSort>
       </>
   );
