@@ -1,4 +1,4 @@
- /** @jsxImportSource @emotion/react */
+/** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
 import color from '../../../styles/color';
 import Logo from '../../../assets/images/SongTangTextLogo.svg';
@@ -13,15 +13,27 @@ const breakpoints = { mobile: '768px' };
 export default function SurveyMusic() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { melodies = [], lyrics = [] } = location.state || {};
+    let { melodies = [], lyrics = [] } = location.state || {};
+    lyrics = [
+        "820ae873b56b18146eb12b495dbfdO6e",
+        "10dec08a91f56df01e31cf548c3b0512",
+        "dca6697bee49ef816af4106c3c3f251f",
+        "0631effe339203dab0a3954041852f98",
+        "a0b86564364114f3a9561563bc9a8a84",
+        "e5b453613efa553313a5b2152f85d786",
+        "9a2b7762a1448394da8846ecdc71e134",
+        "273d1bc4c8893cf9bb2559f6ada60356",
+        "25aafc7a344c4c314578e27d8c556dbe",
+        "10dec08a91f56df01e31cf548c3b0512"
+    ];
 
     const { mutate: createSong } = useCreateSong();
 
     const [step, setStep] = useState<'melody' | 'lyric'>('melody');
     const [melodyIndex, setMelodyIndex] = useState(0);
-    const [lyricIndex, setLyricIndex]   = useState(0);
+    const [lyricIndex, setLyricIndex] = useState(0);
     const [selectedMelodyIds, setSelectedMelodyIds] = useState<string[]>([]);
-    const [selectedLyricIds, setSelectedLyricIds]   = useState<string[]>([]);
+    const [selectedLyricIds, setSelectedLyricIds] = useState<string[]>([]);
 
     const chunkSize = 2;
     const currentMelodies = melodies.slice(melodyIndex, melodyIndex + chunkSize);
@@ -43,7 +55,7 @@ export default function SurveyMusic() {
         setSelectedLyricIds(newSelected);
 
         if (lyricIndex + chunkSize >= lyrics.length) {
-            console.log("멜로디선택:"+selectedMelodyIds, "가사선택"+newSelected);
+            console.log("멜로디선택:" + selectedMelodyIds, "가사선택" + newSelected);
             createSong(
                 {
                     melodies: selectedMelodyIds,
