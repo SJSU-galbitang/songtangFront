@@ -9,7 +9,7 @@ import { useSong } from '@/hooks/useSong';
 interface Melody {
   id: string;
   title: string;
-  length: string;
+  total: string;
 }
 
 const HomePage = () => {
@@ -18,27 +18,27 @@ const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { data } = useSong(searchTerm);
 
-  useEffect(() => {
-    if (data?.id && data?.title && data?.length) {
-      const recents = JSON.parse(localStorage.getItem('recentSongs') || '[]');
-
-      const updated = recents.filter((song: any) => song.id !== data.id);
-      updated.unshift({
-        id: data.id,
-        title: data.title,
-        length: data.length,
-      });
-      if (updated.length > 10) updated.pop();
-
-      localStorage.setItem('recentSongs', JSON.stringify(updated));
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data?.id && data?.title && data?.length) {
+  //     const recents = JSON.parse(localStorage.getItem('recentSongs') || '[]');
+  //
+  //     const updated = recents.filter((song: any) => song.id !== data.id);
+  //     updated.unshift({
+  //       id: data.id,
+  //       title: data.title,
+  //       length: data.length,
+  //     });
+  //     if (updated.length > 10) updated.pop();
+  //
+  //     localStorage.setItem('recentSongs', JSON.stringify(updated));
+  //   }
+  // }, [data]);
 
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem('recentSongs') || '[]');
-    const songs: Melody[] = stored;
-    setRecentSongs(songs);
-  }, [data]);
+    setRecentSongs(stored);
+  }, []);
+  console.log("뽑아낸 송: "+recentSongs);
 
   return (
     <Container>
@@ -73,7 +73,7 @@ const HomePage = () => {
               key={song.id}
               id={song.id}
               title={song.title}
-              length={song.length}
+              length={song.total}
             />
           ))}
         </SongCardList>
