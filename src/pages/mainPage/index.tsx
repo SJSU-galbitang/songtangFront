@@ -46,7 +46,9 @@ const HomePage = () => {
         <Logo>
           <img src={SongTangLogo} alt="Songtang" />
         </Logo>
-        <StartButton onClick={() => navigate('/survey')}>Start Test</StartButton>
+        <StartButton onClick={() => navigate('/survey')}>
+          Start Test
+        </StartButton>
       </Main>
 
       <Sidebar>
@@ -98,6 +100,7 @@ const Container = styled.div`
   background-color: ${color.black};
   color: white;
   overflow-x: hidden;
+  background: ${color.gradient.background};
 `;
 
 const Main = styled.main`
@@ -108,21 +111,22 @@ const Main = styled.main`
 `;
 
 const StartButton = styled.button`
+  padding: 16px 120px;
   background: linear-gradient(90deg, #f72a7d 3%, #e53e3e 46%, #ff16bd 100%);
-  color: ${color.white};
-  padding: 1rem 2rem;
   border: none;
-  border-radius: 10px;
-  height: 78px;
-  width: 487px;
-  text-align: center;
-  font-size: 32px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
   cursor: pointer;
+  transition: opacity 0.2s;
+  &:hover {
+    opacity: 0.9;
+  }
 `;
 
 const Sidebar = styled.aside`
   padding: 1rem;
-  background-color: ${color.black};
+  background-color: rgba(0, 0, 0, 0.5);
   border-left: 1px solid ${color.gray20};
   overflow-y: auto;
   width: 100%;
