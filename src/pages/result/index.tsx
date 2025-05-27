@@ -14,8 +14,10 @@ export default function ResultPage() {
 
   useEffect(() => {
     const recents = JSON.parse(localStorage.getItem('recentSongs') || '[]');
-    if (!recents.includes(id)) {
-      recents.unshift(id);
+    const isExist = recents.some((song: any) => song.id === id);
+
+    if (!isExist) {
+      recents.unshift({ id, title, total });
       if (recents.length > 10) recents.pop();
       localStorage.setItem('recentSongs', JSON.stringify(recents));
     }
