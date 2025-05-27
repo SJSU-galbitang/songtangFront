@@ -126,8 +126,8 @@ const StartButton = styled.button`
 
 const Sidebar = styled.aside`
   padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-left: 1px solid ${color.gray20};
+  background-color: rgba(0, 0, 0, 0.65);
+  //border-left: 1px solid ${color.gray20};
   overflow-y: auto;
   width: 100%;
   padding-left: 23px;

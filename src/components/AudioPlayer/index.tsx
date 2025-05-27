@@ -136,6 +136,7 @@ const IDRow = styled.div`
 const SubTitle = styled.span`
   font-size: 0.875rem;
   color: #b0b0b0;
+  white-space: nowrap;
 `;
 
 const CopyButton = styled.button`
