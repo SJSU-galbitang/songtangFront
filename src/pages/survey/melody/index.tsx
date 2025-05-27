@@ -7,7 +7,7 @@ import AudioPlayer from '../../../components/AudioPlayer';
 
 interface MelodyProps {
   title?: string;
-  id?: number;
+  id?: string;
   current?: number;
   total?: number;
 }
@@ -18,10 +18,16 @@ const breakpoints = {
 
 const SurveyMelody = ({
   title = 'Cruel Summer',
-  id = 123123,
+  id = '123123',
   current = 128,
   total = 328,
 }: MelodyProps) => {
+  const formatTotal = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
+  };
+
   return (
     <StyledTestSong>
       <InnerSort>
@@ -30,8 +36,16 @@ const SurveyMelody = ({
         </LogoSort>
         <StyledD1>Choose a Song 🎵</StyledD1>
         <AudioPlayerSort>
-          <SmallPlayer title={title} id={id} current={current} total={total} />
-          <SmallPlayer title={title} id={id} current={current} total={total} />
+          <SmallPlayer 
+            title={title} 
+            id={id} 
+            total={formatTotal(total)} 
+          />
+          <SmallPlayer 
+            title={title} 
+            id={id} 
+            total={formatTotal(total)} 
+          />
         </AudioPlayerSort>
       </InnerSort>
     </StyledTestSong>

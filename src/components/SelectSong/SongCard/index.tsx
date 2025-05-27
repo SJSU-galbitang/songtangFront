@@ -30,6 +30,12 @@ type SongCardProps = {
     align-items: flex-start;
     padding: 10px;
     gap: 12px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.8;
+    }
   `;
   
   const Img = styled.img`

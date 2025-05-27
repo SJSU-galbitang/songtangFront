@@ -49,6 +49,15 @@ const Header = styled.h1`
   font-size: 1.8rem;
 `;
 
+const PlayerWrapper = styled.div`
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+`;
+
 const BackButton = styled.button`
   margin-top: 32px;
   padding: 16px 120px;
