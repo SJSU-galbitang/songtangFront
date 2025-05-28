@@ -60,10 +60,12 @@ export default function AudioPlayer({ title, id, total, className }: AudioPlayer
         <Cover style={{ backgroundImage: `url(${coverUrl})` }} />
         <Info>
           <SongTitle>{title}</SongTitle>
-          <SongId>ID: {id}</SongId>
-          <CopyButton onClick={copyId}>
-            <img src={Copy} alt="copy icon" />
-          </CopyButton>
+          <IdContainer>
+            <SongId>ID: {id}</SongId>
+            <CopyButton onClick={copyId}>
+              <img src={Copy} alt="copy icon" />
+            </CopyButton>
+          </IdContainer>
           <LyricsBox>
             <p>
               {data?.lyrics || '가사가 없습니다.'}
@@ -119,6 +121,7 @@ const Info = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 500px;
 `;
 
 const SongTitle = styled.h2`
@@ -126,18 +129,25 @@ const SongTitle = styled.h2`
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 4px;
-  padding-right: 340px;
+  white-space: nowrap;
+  margin-right: 310px;
+`;
+
+const IdContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
 const SongId = styled.span`
   color: #aaa;
   font-size: 14px;
-  padding-right: 360px;
+  white-space: nowrap;
 `;
 
 const LyricsBox = styled.div`
   width: 275px;
-  height: 230px;
+  height: 215px;
   background: #000;
   padding: 12px;
   border-radius: 8px;
@@ -210,7 +220,6 @@ const CopyButton = styled.button`
   border: none;
   cursor: pointer;
   padding: 4px;
-  margin-left: 8px;
   img {
     width: 16px;
     height: 16px;
