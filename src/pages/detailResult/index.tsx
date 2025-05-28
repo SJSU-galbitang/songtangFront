@@ -4,7 +4,7 @@ import AudioPlayer from "@/components/DetailAudioPlayer";
 import { useEffect } from 'react';
 
 export default function DetailResultPage() {
-  const navigate = useNavigate();
+//   const navigate = useNavigate();
   const location = useLocation();
 
   const defaultState = {

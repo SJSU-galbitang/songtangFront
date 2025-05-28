@@ -11,7 +11,7 @@ type AudioPlayerProps = {
   lyrics?: string;
 };
 
-export default function AudioPlayer({ title, id, total, className, lyrics }: AudioPlayerProps) {
+export default function AudioPlayer({ title, id, total, className }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
