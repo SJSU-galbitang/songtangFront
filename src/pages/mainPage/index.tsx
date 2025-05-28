@@ -64,6 +64,7 @@ const HomePage = () => {
               id={data.id}
               title={data.title}
               length={data.length}
+              onClick={() => navigate(`/detailResult`, { state: { id: data.id, title: data.title, total: data.length } })}
             />
           </SongCardList>
         )}
@@ -76,6 +77,7 @@ const HomePage = () => {
               id={song.id}
               title={song.title}
               length={song.total}
+              onClick={() => navigate(`/detailResult`, { state: { id: song.id, title: song.title, total: song.total } })}
             />
           ))}
         </SongCardList>

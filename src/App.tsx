@@ -6,6 +6,7 @@ import MainPage from './pages/mainPage';
 import Result from './pages/result';
 import Survey from './pages/survey';
 import SurveyMusic from './pages/survey/music';
+import DetailResultPage from './pages/detailResult';
 
 const queryClient = new QueryClient();
 
@@ -15,6 +16,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainPage />} />
+          <Route path="/detailResult" element={<DetailResultPage />} />
           <Route>
             <Route path="/survey" element={<Survey />} />
             <Route path="/survey/music" element={<SurveyMusic />} />

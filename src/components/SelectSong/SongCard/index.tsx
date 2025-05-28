@@ -5,13 +5,14 @@ type SongCardProps = {
     title: string;
     id: string;
     length: string;
+    onClick?: () => void;
   };
   
-  const SongCard = ({ id, title,length }: SongCardProps) => {
+  const SongCard = ({ id, title,length, onClick }: SongCardProps) => {
     const img = `https://cdn2.suno.ai/image_${id}.jpeg`
     
     return (
-    <CardList>
+    <CardList onClick={onClick}>
         <Img src={img} />
         <TextWrapper>
           <Title>{title}</Title>
