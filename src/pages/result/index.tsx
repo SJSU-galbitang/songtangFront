@@ -15,9 +15,11 @@ export default function ResultPage() {
   const {
     mutate,
     data: songData,
-    isLoading,
+    status,
     isSuccess
   } = useCreateSong();
+
+  const isLoading = status === 'pending';
 
   const [showResult, setShowResult] = useState(false);
 
