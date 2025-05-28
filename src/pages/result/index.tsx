@@ -1,33 +1,78 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import AudioPlayer from '@/components/AudioPlayer';
-import { useEffect } from 'react';
+import DinosaurGame from '@/components/DinosaurGame';
+import { useEffect, useState } from 'react';
+import { useCreateSong } from '@/hooks/useSurvey.ts';
 
 export default function ResultPage() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { title, id, total } = location.state as {
-    title: string;
-    id: string;
-    total: string;
+  const { melodies, lyrics } = useLocation().state as {
+    melodies: string[];
+    lyrics: string[];
   };
 
-  useEffect(() => {
-    const recents = JSON.parse(localStorage.getItem('recentSongs') || '[]');
-    const isExist = recents.some((song: any) => song.id === id);
+  const {
+    mutate,
+    data: songData,
+    status,
+    isSuccess
+  } = useCreateSong();
 
-    if (!isExist) {
-      recents.unshift({ id, title, total });
-      if (recents.length > 10) recents.pop();
-      localStorage.setItem('recentSongs', JSON.stringify(recents));
+  const isLoading = status === 'pending';
+
+  const [showResult, setShowResult] = useState(false);
+
+  useEffect(() => {
+    if (!melodies || !lyrics) {
+      navigate('/');
+      return;
     }
-  }, [id]);
+    mutate({ melodies, lyrics });
+  }, [melodies, lyrics]);
+
+  const handleRefresh = () => {
+    if (!isLoading && !isSuccess) {
+      mutate({ melodies, lyrics });
+    } else if (isSuccess) {
+      setShowResult(true);
+      const { id, title, length: total } = songData!;
+      const recents = JSON.parse(localStorage.getItem('recentSongs') || '[]');
+      if (!recents.some((s: any) => s.id === id)) {
+        recents.unshift({ id, title, total });
+        if (recents.length > 10) recents.pop();
+        localStorage.setItem('recentSongs', JSON.stringify(recents));
+      }
+    }
+  };
 
   return (
     <Wrapper>
-      <Header>Here is your result. 🔥</Header>
-      <AudioPlayer title={title} id={id} total={total} />
-      <BackButton onClick={() => navigate('/')}>Back to Home</BackButton>
+      {!showResult ? (
+        <>
+          <Header>
+            {isLoading
+              ? "Your song is still being generated. Click Refresh below to check if it's ready."
+              : "Still processing? Click Refresh to retry."}
+          </Header>
+
+          <DinosaurGame />
+
+          <RefreshButton onClick={handleRefresh}>
+            {isLoading ? 'Generating song...' : 'Refresh'}
+          </RefreshButton>
+        </>
+      ) : (
+        <>
+          <Header>Here is your result. 🔥</Header>
+          <AudioPlayer
+            title={songData!.title}
+            id={songData!.id}
+            total={songData!.length}
+          />
+          <BackButton onClick={() => navigate('/')}>Back to Home</BackButton>
+        </>
+      )}
     </Wrapper>
   );
 }
@@ -37,10 +82,9 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
   color: #fff;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   background: #151515;
 `;
 
@@ -62,4 +106,13 @@ const BackButton = styled.button`
   &:hover {
     opacity: 0.9;
   }
+`;
+
+const RefreshButton = styled.button`
+  margin-top: 10%;
+  padding: 16px 80px;
+  background: #fff;
+  color: #000;
+  border-radius: 6px;
+  cursor: pointer;
 `;

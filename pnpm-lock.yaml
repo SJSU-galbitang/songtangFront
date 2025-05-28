@@ -23,6 +23,9 @@ importers:
       react:
         specifier: ^19.1.0
         version: 19.1.0
+      react-chrome-dino-ts:
+        specifier: ^0.1.2
+        version: 0.1.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react-dom:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
@@ -1402,6 +1405,12 @@ packages:
   raw-body@3.0.0:
     resolution: {integrity: sha512-RmkhL8CAyCRPXCE28MMH0z2PNWQBNk2Q09ZdxM9IOOXwxwZbN+qbWaatPkdkWIKL2ZVDImrN/pK5HTRz2PcS4g==}
     engines: {node: '>= 0.8'}
+
+  react-chrome-dino-ts@0.1.2:
+    resolution: {integrity: sha512-UT7zEkeLFykgwgl2r/5FHzZgs0Bp8c/ZpB+4TZxMPdgakrXGbR7CZl/wYZ5uTJKDwqf7JcEE/5sVZsKaWXuSBA==}
+    peerDependencies:
+      react: ^17 || ^18
+      react-dom: ^17 || ^18
 
   react-dom@19.1.0:
     resolution: {integrity: sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g==}
@@ -3005,6 +3014,11 @@ snapshots:
       http-errors: 2.0.0
       iconv-lite: 0.6.3
       unpipe: 1.0.0
+
+  react-chrome-dino-ts@0.1.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   react-dom@19.1.0(react@19.1.0):
     dependencies:
