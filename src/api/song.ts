@@ -1,6 +1,10 @@
 import api from '@/lib/customAxios';
 import type { Song } from '@/types/song';
 
+interface LyricsResponse {
+  lyrics: string;
+}
+
 export const fetchSong = async (songId: string) => {
   try {
     const res = await api.get<Song>(`/song/${encodeURIComponent(songId)}`);
@@ -31,9 +35,9 @@ export const getLyrics = async (songId: string) => {
   }
 }
 
-export const getLyricsBySongId = async (songId: string) => {
+export const getLyricsBySongId = async (songId: string): Promise<LyricsResponse> => {
   try {
-    const res = await api.post(`/song/${encodeURIComponent(songId)}`);
+    const res = await api.get<LyricsResponse>(`/song/${encodeURIComponent(songId)}/lyrics`);
     if (res.status !== 200) {
       return Promise.reject({
         status: res.status,
