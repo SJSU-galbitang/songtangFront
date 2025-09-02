@@ -10,20 +10,20 @@ interface Props {
 }
 const breakpoints = { mobile: '768px' };
 
-export default function SurveyLyric({ lyrics, onLyricSelect }: Props ) {
-  console.log("설베이리릭에서의 가사: "+lyrics)
+export default function SurveyLyric({ lyrics, onLyricSelect }: Props) {
+  console.log("설베이리릭에서의 가사: " + lyrics)
   return (
-      <>
-        <StyledD1>Choose the Lyrics 📃</StyledD1>
-        <LyricViewerSort>
-          {lyrics.map((lyric) => (
-              <LyricViewer
-                  key={lyric}
-                  lyrics={lyric}
-                  onClick={() => onLyricSelect(lyric)}/>
-          ))}
-        </LyricViewerSort>
-      </>
+    <>
+      <StyledD1>Choose the Lyrics 📃</StyledD1>
+      <LyricViewerSort>
+        {lyrics.map((lyric) => (
+          <LyricViewer
+            key={lyric}
+            lyrics={lyric}
+            onClick={() => onLyricSelect(lyric)} />
+        ))}
+      </LyricViewerSort>
+    </>
   );
 }
 

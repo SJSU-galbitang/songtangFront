@@ -15,7 +15,7 @@ export default function AudioPlayer({ title, id, total, className }: AudioPlayer
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
-  const { data } = useGetLyricsBySongId(id);
+  // const { data } = useGetLyricsBySongId(id);
 
   const audioSrc = `https://cdn1.suno.ai/${id}.mp3`;
   const coverUrl = `https://cdn2.suno.ai/image_${id}.jpeg`;
@@ -68,7 +68,10 @@ export default function AudioPlayer({ title, id, total, className }: AudioPlayer
           </IdContainer>
           <LyricsBox>
             <p>
-              {data?.lyrics || '가사가 없습니다.'}
+              {
+                "[Verse]\nHeart's a drum that's out of sync\nBreath's a whisper on the brink\nMirror laughs\nMy hair's a mess\nBut I swear I'll try my best\n\n[Chorus]\nButterflies\nThey twist and twirl\nIn my chest\nThey loop and swirl\nAnticipation’s sweet parade\nDancing wild before the date\n\n[Verse 2]\nShoes untied\nI trip\nI fall\nWonder if you'll like it all\nEvery word I plan to say\nMight just fly and float away\n\n[Chorus]\nButterflies\nThey twist and twirl\nIn my chest\nThey loop and swirl\nAnticipation’s sweet parade\nDancing wild before the date\n\n[Bridge]\nIt's chaos but it feels so right\nLike stars colliding in the night\nI hold my breath\nI check my phone\nNo way I'd face this world alone\n\n[Chorus]\nButterflies\nThey twist and twirl\nIn my chest\nThey loop and swirl\nAnticipation’s sweet parade\nDancing wild before the date"
+              }
+              {/* {data?.lyrics || '가사가 없습니다.'} */}
             </p>
           </LyricsBox>
         </Info>

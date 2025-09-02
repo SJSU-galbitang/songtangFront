@@ -4,24 +4,24 @@ import color from '@/styles/color.ts';
 import { useGetLyrics } from "@/hooks/useSong.ts";
 
 interface LyricViewerProps {
-    lyrics: string;
-    onClick: () => void;
+  lyrics: string;
+  onClick: () => void;
 }
 
 const breakpoints = {
-    mobile: '768px',
+  mobile: '768px',
 };
 
 const LyricViewer = ({ lyrics, onClick }: LyricViewerProps) => {
-    console.log("가사뷰어에서의 가사: "+lyrics)
-    const { data } = useGetLyrics(lyrics);
-    console.log(data)
+  console.log("가사뷰어에서의 가사: " + lyrics)
+  const { data } = useGetLyrics(lyrics);
+  console.log(data)
 
-    return (
-        <Card onClick={onClick}>
-            <StyledP>{data?.lyrics}</StyledP>
-        </Card>
-    );
+  return (
+    <Card onClick={onClick}>
+      <StyledP>{data?.lyrics}</StyledP>
+    </Card>
+  );
 };
 
 export default LyricViewer;
@@ -36,7 +36,7 @@ const Card = styled.div`
   padding: 1rem 0.3rem;
   overflow: hidden;
   width: 100%;
-  height: 100%;
+  // height: 100%;
   flex-direction: column;
   cursor: pointer;
   transition: border 0.3s;
