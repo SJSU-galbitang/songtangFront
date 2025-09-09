@@ -19,7 +19,7 @@ const LyricViewer = ({ lyrics, onClick }: LyricViewerProps) => {
 
   return (
     <Card onClick={onClick}>
-      <StyledP>{data?.lyrics}</StyledP>
+      <StyledP>"[Verse]<br/>Feet hit the ground where the dreams collide<br/>City lights dance like a firefly guide<br/>Statue's torch shining<br/>A beacon of might<br/>Chasing the stars in the velvet night<br/><br/>[Chorus]<br/>I’m seeing the world through a brand-new frame<br/>Each monument calling<br/>Each whisper my name<br/>Heart beats fast<br/>I can hardly wait<br/>First time across the states<br/><br/>[Verse 2]<br/>From the canyon’s edge to the golden shore<br/>Every step feels like a brand-new door<br/>Mountains that roar and streets that sing<br/>The sound of freedom on eagle’s wings<br/><br/>[Chorus]<br/>I’m seeing the world through a brand-new frame<br/>Each monument calling<br/>Each whisper my name<br/>Heart beats fast<br/>I can hardly wait<br/>First time across the states<br/><br/>[Bridge]<br/>Hands in the air<br/>The rush won’t fade<br/>History carved<br/>And memories made<br/>Each moment’s alive<br/>It’s a love cascade<br/>I’m riding this dream<br/>I’m unafraid<br/><br/>[Chorus]<br/>I’m seeing the world through a brand-new frame<br/>Each monument calling<br/>Each whisper my name<br/>Heart beats fast<br/>I can hardly wait<br/>First time across the states</StyledP>
     </Card>
   );
 };
