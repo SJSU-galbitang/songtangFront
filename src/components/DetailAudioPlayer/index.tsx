@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import styled from '@emotion/styled';
 import Copy from '../../assets/copy.svg';
-import { useGetLyricsBySongId } from '@/hooks/useSong';
 
 type AudioPlayerProps = {
   title: string;
