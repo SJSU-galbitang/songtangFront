@@ -1,10 +1,6 @@
 import api from '@/lib/customAxios';
 import type { Song } from '@/types/song';
 
-interface LyricsResponse {
-  lyrics: string;
-}
-
 export const fetchSong = async (songId: string) => {
   try {
     const res = await api.get<Song>(`/song/${encodeURIComponent(songId)}`);
